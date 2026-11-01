@@ -4,6 +4,10 @@ All notable changes to mxtape. Generated from the release commits by
 `scripts/changelog.mjs` — do not edit by hand. The app shows the same list
 under Settings → Version.
 
+## 0.30.1 — 2026-11-01
+
+- **Fixed:** the changelog's dates in English too
+
 ## 0.30.0 — 2026-11-01
 
 - **New:** a changelog in the settings, kept automatically

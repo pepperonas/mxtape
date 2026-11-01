@@ -6,7 +6,6 @@
 import { SubPageHeader } from '@/shell/AppShell'
 import { useMessages } from '@/i18n'
 import { profileText } from '@/i18n/messages/profile'
-import { formatDay } from '@/utils/format'
 import { VERSION } from './ProfileScreen'
 import releases from '@/data/changelog.json'
 
@@ -18,6 +17,10 @@ export interface Release {
 }
 
 export const RELEASES = releases as Release[]
+
+/** Dates in English too, whatever the app's language („1 Nov 2026“, never „heute“). */
+export const releaseDate = (iso: string) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
 
 const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
@@ -43,7 +46,7 @@ export function ChangelogScreen() {
                   {r.type === 'fix' ? 'Fixed' : 'New'}
                 </span>
                 {r.version === VERSION && <span className="text-label-md text-md-primary">Current</span>}
-                <span className="meta">{formatDay(r.date)}</span>
+                <span className="meta">{releaseDate(r.date)}</span>
               </span>
               <span className="block text-body-lg mt-1">{capital(r.summary)}</span>
             </span>

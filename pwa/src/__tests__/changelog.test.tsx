@@ -11,7 +11,7 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { MotionTestProvider } from '@/test/MotionTestProvider'
 import { AppProviders } from '@/contexts'
-import { ChangelogScreen, RELEASES } from '@/screens/ChangelogScreen'
+import { ChangelogScreen, RELEASES, releaseDate } from '@/screens/ChangelogScreen'
 import { VERSION } from '@/screens/ProfileScreen'
 
 const ROOT = join(__dirname, '../../..')
@@ -123,6 +123,9 @@ describe('the page', () => {
     expect(list.getAttribute('lang')).toBe('en')
     expect(list.querySelectorAll('[data-release]').length).toBe(RELEASES.length)
     expect(screen.getAllByText(/^(New|Fixed)$/).length).toBe(RELEASES.length)
+    expect(releaseDate('2026-11-01')).toBe('1 Nov 2026')
+    expect(list.textContent).toContain(releaseDate(RELEASES[0].date))
+    expect(list.textContent).not.toMatch(/heute|gestern|Okt\.|Nov\./)
     if (RELEASES[0].version === VERSION) expect(screen.getByText('Current')).toBeInTheDocument()
     expect(read('pwa/src/screens/ProfileScreen.tsx')).toContain("navigate('/settings/changelog')")
     expect(read('pwa/src/App.tsx')).toContain("{ path: '/settings/changelog', element: <ChangelogScreen /> }")
