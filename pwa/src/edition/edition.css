@@ -1,0 +1,137 @@
+/* A personal sleeve, drawn in-house. Edition colours never replace verdict colours. */
+html[data-edition='martin'] {
+  --edition-gold: #dec99a;
+  --edition-muted: #a7beb0;
+  --edition-ink: #eff7f1;
+  --edition-green: #163d30;
+  --edition-line: rgb(222 201 154 / .3);
+  --edition-ghost: rgb(222 201 154 / .07);
+}
+html[data-edition='martin'][data-theme='light'] {
+  --edition-gold: #74602e;
+  --edition-muted: #4e6b5d;
+  --edition-ink: #14392d;
+  --edition-green: #e0ece3;
+  --edition-line: rgb(63 95 73 / .3);
+  --edition-ghost: rgb(33 78 52 / .07);
+}
+.edition-banner, .edition-moment {
+  font-family: inherit;
+  color: var(--edition-ink);
+}
+.edition-banner {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 330px;
+  padding: 26px 28px 24px;
+  border: 1px solid var(--edition-line);
+  border-radius: 28px;
+  background: linear-gradient(115deg, var(--edition-green), color-mix(in srgb, var(--edition-green) 60%, rgb(var(--md-sys-color-surface))));
+}
+.edition-banner::after {
+  content: '';
+  position: absolute;
+  right: 22%; top: -100%;
+  width: 1px; height: 300%;
+  background: var(--edition-line);
+  transform: rotate(28deg);
+  z-index: -1;
+}
+.edition-kicker { display: block; color: var(--edition-muted); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; }
+.edition-banner-copy { position: relative; z-index: 1; max-width: 55%; }
+.edition-banner h2 { margin: 12px 0 17px; font-size: clamp(26px, 4vw, 38px); line-height: 1.05; font-weight: 760; font-variation-settings: 'wdth' 115; letter-spacing: -.035em; }
+.edition-banner h2 span { display: block; color: var(--edition-gold); }
+.edition-banner p { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--edition-gold); font-size: 12px; letter-spacing: .04em; }
+.edition-oak { width: 18px; height: 18px; flex-shrink: 0; }
+.edition-number { margin-left: 8px; padding-left: 12px; border-left: 1px solid var(--edition-line); font-variant-numeric: tabular-nums; }
+.edition-car { display: block; width: 100%; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.edition-banner > .edition-car { position: absolute; right: -22px; bottom: 25px; width: 52%; max-width: 520px; color: var(--edition-gold); opacity: .4; z-index: -1; transform: rotate(-4deg); }
+.edition-banner-rule { width: 40px; height: 2px; position: absolute; right: 26px; top: 27px; background: var(--edition-gold); box-shadow: -7px 5px 0 var(--edition-line); }
+.edition-backdrop { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; background: radial-gradient(ellipse at 100% 90%, rgb(36 101 69 / .08), transparent 65%); }
+.edition-background-car { position: absolute; bottom: 12%; right: -8%; width: min(75vw, 1000px); color: var(--edition-ghost); transform: rotate(-8deg); }
+.edition-watermark { position: absolute; bottom: 100px; right: 6%; font-size: clamp(25px, 5vw, 68px); font-weight: 760; font-variation-settings: 'wdth' 125; letter-spacing: -.04em; color: var(--edition-ghost); }
+.edition-watermark span { font-weight: 300; }
+.edition-dial { position: absolute; width: 300px; height: 300px; right: -170px; top: 20%; border: 1px solid var(--edition-ghost); border-radius: 50%; color: var(--edition-ghost); transform: rotate(-25deg); }
+.edition-dial::before { content: ''; position: absolute; inset: 12px; border: 10px dashed var(--edition-ghost); border-radius: 50%; }
+.edition-dial span { position: absolute; left: 50px; top: 105px; font-size: 38px; font-weight: 700; }
+.edition-dial small { position: absolute; left: 43px; top: 157px; font-size: 9px; letter-spacing: .15em; }
+
+.edition-moment { position: fixed; pointer-events: none; z-index: 40; bottom: calc(112px + env(safe-area-inset-bottom)); right: 24px; padding: 12px 20px; border-right: 2px solid var(--edition-gold); background: var(--edition-green); border-radius: 16px 0 0 16px; font-size: 23px; letter-spacing: -.02em; box-shadow: 0 8px 30px rgb(0 0 0 / .08); animation: edition-moment 4s cubic-bezier(.22, 1, .36, 1) both; }
+.edition-moment span { display: block; margin-bottom: 3px; font-size: 8px; font-weight: 600; letter-spacing: .22em; color: var(--edition-gold); }
+.edition-moment b { display: block; font-weight: 600; }
+.edition-moment i { display: block; width: 24px; height: 1px; margin-top: 9px; background: var(--edition-gold); }
+
+@keyframes edition-shine { to { transform: translateX(100%); } }
+
+@keyframes edition-moment { 0%, 100% { opacity: 0; translate: 10px 0; } 15%, 85% { opacity: 1; translate: 0 0; } }
+/* Real three-quarter geometry from the reference, built up like a designer's tracing. */
+.edition-car { position: relative; display: block; width: 100%; }
+.edition-car-ink { transform-box: fill-box; }
+.edition-car-guide { opacity: 0; }
+.edition-car-draw .edition-car-guide { animation: edition-sketch-guide 2400ms ease-out both; }
+.edition-car-draw .edition-car-finish { animation: edition-sketch-ink 2200ms var(--mx-draw, ease-in-out) both; }
+.edition-banner > .edition-car { right: 8px; width: 61%; bottom: 3px; transform: none; opacity: .88; }
+.edition-banner-rule { transform-origin: right; animation: edition-rule-in 1400ms 300ms both; }
+.edition-moment { border-right-width: 1px; border-radius: 18px 4px 4px 18px; overflow: hidden; }
+.edition-moment b { animation: edition-letter-in 900ms 100ms both; }
+.edition-moment i { width: 38px; transform-origin: left; animation: edition-rule-in 1600ms 200ms both; }
+
+/* The settings page opens like a personal presentation sleeve. */
+.edition-dedication {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 350px;
+  border: 1px solid var(--edition-line);
+  border-radius: 28px;
+  background: linear-gradient(125deg, var(--edition-green), color-mix(in srgb, var(--edition-green) 80%, #081c15));
+  color: var(--edition-ink);
+  animation: edition-letter-in 1100ms both;
+}
+.edition-dedication-copy { position: relative; z-index: 2; padding: 30px 32px 80px; }
+.edition-dedication-copy > * { animation: edition-letter-in 1200ms 200ms both; }
+.edition-dedication h2 { margin: 18px 0 14px; line-height: 1.08; font-weight: 400; letter-spacing: -.035em; }
+.edition-dedication h2 > span { font-size: clamp(22px, 3.5vw, 30px); font-weight: 400; }
+.edition-dedication h2 strong { display: block; margin-top: 3px; color: var(--edition-gold); font-size: clamp(42px, 6vw, 64px); font-weight: 760; font-variation-settings: 'wdth' 115; animation: edition-letter-in 1400ms 350ms both; }
+.edition-dedication-copy p { font-size: 12px; color: var(--edition-muted); letter-spacing: .025em; animation-delay: 600ms; }
+.edition-dedication-art { position: absolute; width: 54%; right: 10px; bottom: 49px; color: var(--edition-gold); z-index: 1; animation: edition-car-arrive 2300ms 250ms both; }
+.edition-dedication-art > .edition-car { opacity: .88; }
+.edition-dedication-911 { position: absolute; right: 15%; bottom: 44%; font-size: clamp(90px, 14vw, 160px); line-height: 1; font-weight: 800; font-style: italic; letter-spacing: -.08em; opacity: .055; }
+.edition-dedication-footer { position: absolute; inset: auto 24px 0; height: 50px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid var(--edition-line); color: var(--edition-gold); font-size: 10px; letter-spacing: .1em; }
+.edition-dedication-footer > span:last-child { display: flex; align-items: center; gap: 10px; }
+.edition-dedication-footer i { display: block; width: 5px; height: 5px; border-radius: 50%; background: currentColor; box-shadow: 0 0 12px rgb(222 201 154 / .45); }
+.edition-dedication-glow { position: absolute; width: 500px; height: 500px; right: -220px; top: -240px; border-radius: 50%; background: radial-gradient(circle, rgb(222 201 154 / .18), transparent 65%); animation: edition-orbit-in 2400ms both; }
+.edition-dedication-grid { position: absolute; width: 350px; height: 350px; top: -140px; right: -70px; border: 1px solid var(--edition-line); border-radius: 50%; opacity: .35; animation: edition-orbit-in 2200ms both; }
+.edition-dedication-grid::before, .edition-dedication-grid::after { content: ''; position: absolute; border: 1px solid var(--edition-line); border-radius: 50%; inset: 24px; }
+.edition-dedication-grid::after { inset: 48px; }
+.edition-dedication-track { position: absolute; inset: auto 24px 50px; height: 1px; overflow: hidden; }
+.edition-dedication-track i { display: block; height: 1px; width: 70px; background: linear-gradient(90deg, transparent, var(--edition-gold), transparent); animation: edition-track 2500ms 400ms cubic-bezier(.4, 0, .2, 1) both; }
+.edition-dedication::after { content: ''; pointer-events: none; position: absolute; inset: 0; z-index: 3; background: linear-gradient(115deg, transparent 40%, rgb(222 201 154 / .11) 50%, transparent 60%); animation: edition-shine 2200ms 400ms both; }
+@keyframes edition-sketch-guide { 0% { opacity: 0; } 25% { opacity: .16; } 100% { opacity: 0; } }
+@keyframes edition-sketch-ink { from { clip-path: inset(0 100% 0 0); opacity: .5; } to { clip-path: inset(0 0 0 0); opacity: 1; } }
+@keyframes edition-car-arrive { from { opacity: 0; translate: 18px 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes edition-letter-in { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
+@keyframes edition-rule-in { from { scale: 0 1; opacity: 0; } to { scale: 1 1; opacity: 1; } }
+@keyframes edition-orbit-in { from { opacity: 0; scale: .85; rotate: -12deg; } to { scale: 1; rotate: 0deg; } }
+@keyframes edition-track { from { transform: translateX(-90px); opacity: 0; } 20% { opacity: 1; } to { transform: translateX(700px); opacity: 0; } }
+@media (max-width: 640px) {
+  .edition-banner { padding: 24px; min-height: 370px; }
+  .edition-banner-copy { max-width: none; }
+  .edition-banner > .edition-car { width: 98%; right: 0; bottom: 6px; opacity: .88; }
+  .edition-dedication { min-height: 430px; }
+  .edition-dedication-copy { padding: 26px 24px 220px; }
+  .edition-dedication h2 strong { font-size: 46px; }
+  .edition-dedication-art { width: 94%; right: 8px; bottom: 48px; }
+  .edition-dedication-art > .edition-car { opacity: .88; }
+  .edition-dedication-911 { font-size: 110px; right: 12%; bottom: 26%; }
+  .edition-banner h2 { font-size: 29px; }
+  .edition-banner p { margin-top: 24px; }
+  .edition-kicker { font-size: 9px; }
+  .edition-background-car { width: 115vw; right: -25%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .edition-car-draw *, .edition-moment, .edition-moment *, .edition-banner-rule,
+  .edition-dedication, .edition-dedication *, .edition-dedication::after { animation: none !important; }
+  .edition-dedication::after, .edition-dedication-track { display: none; }
+}

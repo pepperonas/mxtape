@@ -28,10 +28,12 @@ import { englishPath, LEGACY_SEGMENTS } from '@/legacyPaths'
 import { MotionProvider } from '@/motion/MotionProvider'
 import { LegalScreen } from '@/legal/LegalScreen'
 import { LanguageProvider } from '@/i18n'
+import { SpecialEdition } from '@/edition/SpecialEdition'
 import { Backdrop } from '@/components/ui/Backdrop'
 import './styles/design-tokens.css'
 import './styles/tailwind.css'
 import './styles/motion.css'
+import './edition/edition.css'
 
 /**
  * Root layout: sign-in gate around everything, then the providers that load
@@ -62,6 +64,7 @@ function Root() {
       <AuthProvider>
         <AuthGate>
           <AppProviders>
+            <SpecialEdition />
             <Outlet />
             <Modal />
             <Toast />

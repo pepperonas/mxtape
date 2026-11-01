@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { MotionTestProvider } from '@/test/MotionTestProvider'
 import { AuthProvider } from '../AuthContext'
@@ -48,9 +48,23 @@ const submitButton = () => {
 
 const type = (label: RegExp, value: string) => fireEvent.change(screen.getByLabelText(label), { target: { value } })
 
-afterEach(() => vi.unstubAllGlobals())
+afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks() })
 
 describe('EmailAuth', () => {
+  it.each(['martin', null])('returns the gift account to its card after email sign-in (edition %s)', async (edition) => {
+    const scroll = vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    serve({ '/api/auth/password-login': () => ({ status: 200, body: {
+      id: 42, email: 'gift@example.com', name: 'Martin', picture: '', status: 'approved', isAdmin: false, csrf: 'csrf', edition
+    } }) })
+    renderAuth()
+    type(/e-mail-adresse/i, 'gift@example.com')
+    type(/^passwort$/i, 'test-password')
+    fireEvent.click(submitButton())
+    await waitFor(() => expect(submitButton()).not.toBeDisabled())
+    if (edition === 'martin') expect(scroll).toHaveBeenCalledWith({ top: 0, left: 0, behavior: 'instant' })
+    else expect(scroll).not.toHaveBeenCalled()
+  })
+
   it('registers with name, address and password, then says to check the inbox', async () => {
     const calls = serve({ '/api/auth/register': () => ({ status: 202, body: { ok: true } }) })
     renderAuth({ initialMode: 'register', initialName: 'Lisa' })

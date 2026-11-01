@@ -1,6 +1,7 @@
 /**
  * Profil — account, appearance, game options, saved players, data, admin.
  */
+import { EditionDedication } from '@/edition/SpecialEdition'
 import { clearSavedGame } from '@/game/savedGame'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useAuth, useMe } from '@/auth/AuthContext'
@@ -20,7 +21,7 @@ import { LanguageSwitch } from '@/components/ui/LanguageSwitch'
 import { useMessages } from '@/i18n'
 import { profileText } from '@/i18n/messages/profile'
 
-export const VERSION = '0.28.3'
+export const VERSION = '0.28.6'
 
 export function ProfileScreen() {
   const me = useMe()
@@ -101,6 +102,7 @@ export function ProfileScreen() {
   return (
     <div className="pt-4 md:pt-10 space-y-6 stagger-children">
       <h1 className="text-headline-md">{t.settingsTitle}</h1>
+      <EditionDedication />
 
       <Group title={t.account}>
         <div className="flex items-center gap-4 px-4 py-4">

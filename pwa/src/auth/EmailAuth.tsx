@@ -58,7 +58,9 @@ export function EmailAuth({ initialMode = 'signin', initialName = '' }: { initia
     try {
       if (mode === 'signin') {
         await api('/api/auth/password-login', { method: 'POST', json: { email, password } })
-        await refresh()
+        const me = await refresh()
+        // Leave the scrolled email form at the personal edition's opening card.
+        if (me?.edition === 'martin') window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
         return
       }
       if (mode === 'register') {

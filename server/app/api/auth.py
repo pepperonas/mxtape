@@ -50,6 +50,7 @@ def user_payload(user: User, csrf: str) -> dict:
         "isAdmin": is_admin_email(user.email),
         "hasPassword": user.password_hash is not None,
         "dailyMail": bool(user.daily_mail),
+        "edition": "martin" if (user.status == "approved" and user.email.casefold() == get_settings().mxtape_martin_edition_email.strip().casefold()) else None,
         "csrf": csrf,
     }
 

@@ -4,6 +4,7 @@
  * new round (the record half out of its sleeve), the last round and the
  * nearest achievement. Nothing else competes for attention.
  */
+import { EditionBanner } from '@/edition/SpecialEdition'
 import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, m } from 'motion/react'
 import { Avatar } from '@/components/ui/Avatar'
@@ -80,6 +81,7 @@ export function HomeScreen() {
 
   return (
     <div className="flex-1 flex flex-col pt-4 md:pt-10 space-y-6">
+      <EditionBanner />
       <h1 className="text-headline-md text-md-on-surface">
         {running ? t.greetRunning(firstName) : last ? t.greetAgain(firstName) : t.greetFirst(firstName)}
       </h1>

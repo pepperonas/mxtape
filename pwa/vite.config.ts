@@ -36,7 +36,7 @@ export default defineConfig({
         // Never precache audio: /audio/ needs a signed-in session (nginx auth_request)
         globPatterns: ['**/*.{js,css,html,ico,svg,woff2}'],
         globIgnores: ['**/assets/**/*.png', 'audio/**'],
-        cacheId: 'mxtape-v13',
+        cacheId: 'mxtape-v14',
         cleanupOutdatedCaches: true,
         // Navigation fallback - always serve index.html for SPA routes
         navigateFallback: '/index.html',

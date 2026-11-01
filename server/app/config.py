@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     session_ttl_hours: int = 720
 
     mxtape_admin_emails: str = "martinpaush@gmail.com"
+    # Optional personal edition, identified only by the authenticated account.
+    mxtape_martin_edition_email: str = ""
+
     # Dev-only fake login (hard-refused in prod) so the UI can be driven locally.
     mx_dev_login: bool = False
 

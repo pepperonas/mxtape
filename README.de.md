@@ -17,10 +17,10 @@
 <p>Neu hier? <a href="https://mxtape.celox.io/about"><b>mxtape.celox.io/about</b></a> stellt das Spiel vor und beantwortet die häufigen Fragen – mit einer kleinen Zeitleiste zum Ausprobieren, ganz ohne Konto.</p>
 
 <!-- BADGES:BIG — version, tests, lines of code and songs; readme.test.ts keeps them true, scripts/readme-badges.mjs rewrites them. -->
-[![version](https://img.shields.io/badge/version-0.28.3-C2185B?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/pepperonas/mxtape/releases/latest)
-[![tests](https://img.shields.io/badge/tests-1149-2E9E5B?style=for-the-badge&logo=vitest&logoColor=white)](#tests-und-ci)
-[![lines of code](https://img.shields.io/badge/lines%20of%20code-32.8k-4B6BDF?style=for-the-badge&logo=typescript&logoColor=white)](pwa/src)
-[![test code](https://img.shields.io/badge/test%20code-13.6k-2E9E5B?style=for-the-badge&logo=typescript&logoColor=white)](#tests-und-ci)
+[![version](https://img.shields.io/badge/version-0.28.6-C2185B?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/pepperonas/mxtape/releases/latest)
+[![tests](https://img.shields.io/badge/tests-1164-2E9E5B?style=for-the-badge&logo=vitest&logoColor=white)](#tests-und-ci)
+[![lines of code](https://img.shields.io/badge/lines%20of%20code-33.1k-4B6BDF?style=for-the-badge&logo=typescript&logoColor=white)](pwa/src)
+[![test code](https://img.shields.io/badge/test%20code-13.9k-2E9E5B?style=for-the-badge&logo=typescript&logoColor=white)](#tests-und-ci)
 [![songs](https://img.shields.io/badge/songs-800-FF8A3D?style=for-the-badge&logo=applemusic&logoColor=white)](#die-songsammlung)
 
 [![Donate with PayPal](https://img.shields.io/badge/PayPal-support%20this%20project-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?business=martin.pfeffer@celox.io&currency_code=EUR&item_name=mxtape)
@@ -259,6 +259,8 @@ cd pwa && npm install && npm run dev
 Durchgehend `127.0.0.1` verwenden – das Sitzungs-Cookie hängt am Host.
 
 ## Technik
+
+Optionale persönliche Editionen werden vom Server einem freigegebenen Konto zugeordnet. Sie ergänzen ausschließlich dessen Oberfläche um eine Begrüßung und dezente Gestaltung; Spielregeln und die Ansicht anderer Mitspielender bleiben gleich. Einrichtung: [Persönliche Editionen](docs/personal-editions.md).
 
 | Ebene | Wahl |
 |-------|------|

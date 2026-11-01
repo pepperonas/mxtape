@@ -19,6 +19,8 @@ export interface Me {
   hasPassword?: boolean
   /** Mails from friends about their daily round (profile switch). */
   dailyMail?: boolean
+  /** Account-specific gift; selected by the server, never by a display name. */
+  edition?: 'martin' | null
   csrf: string
 }
 
