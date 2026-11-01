@@ -17,10 +17,10 @@
 <p>Neu hier? <a href="https://mxtape.celox.io/about"><b>mxtape.celox.io/about</b></a> stellt das Spiel vor und beantwortet die häufigen Fragen – mit einer kleinen Zeitleiste zum Ausprobieren, ganz ohne Konto.</p>
 
 <!-- BADGES:BIG — version, tests, lines of code and songs; readme.test.ts keeps them true, scripts/readme-badges.mjs rewrites them. -->
-[![version](https://img.shields.io/badge/version-0.29.1-C2185B?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/pepperonas/mxtape/releases/latest)
-[![tests](https://img.shields.io/badge/tests-1218-2E9E5B?style=for-the-badge&logo=vitest&logoColor=white)](#tests-und-ci)
+[![version](https://img.shields.io/badge/version-0.30.0-C2185B?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/pepperonas/mxtape/releases/latest)
+[![tests](https://img.shields.io/badge/tests-1226-2E9E5B?style=for-the-badge&logo=vitest&logoColor=white)](#tests-und-ci)
 [![lines of code](https://img.shields.io/badge/lines%20of%20code-34.2k-4B6BDF?style=for-the-badge&logo=typescript&logoColor=white)](pwa/src)
-[![test code](https://img.shields.io/badge/test%20code-14.6k-2E9E5B?style=for-the-badge&logo=typescript&logoColor=white)](#tests-und-ci)
+[![test code](https://img.shields.io/badge/test%20code-14.8k-2E9E5B?style=for-the-badge&logo=typescript&logoColor=white)](#tests-und-ci)
 [![songs](https://img.shields.io/badge/songs-800-FF8A3D?style=for-the-badge&logo=applemusic&logoColor=white)](#die-songsammlung)
 
 [![Donate with PayPal](https://img.shields.io/badge/PayPal-support%20this%20project-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?business=martin.pfeffer@celox.io&currency_code=EUR&item_name=mxtape)
@@ -183,6 +183,7 @@ Statt ein Handy herumzureichen, spielt jede Person auf dem eigenen Gerät – im
 - **800 Songs** von den 50ern bis heute, selbst gehostet, auf Wunsch mit zufälliger Startstelle
 - **Jahres-Ausgleich:** für gemischte Runden darf jede Person ±1, 2, 3 oder 5 Jahre danebenliegen – die Karte zählt trotzdem und rutscht an ihren richtigen Platz, im Hardcore-Modus zählt das Jahr, als läge es so viel näher
 - **Kein Warten auf die Musik:** während die Karte aufgedeckt ist, wird der nächste Song schon ausgewählt und geladen; er startet sofort beim Ziehen
+- **Changelog:** Einstellungen → Version zeigt jede Version, auf Englisch – siehe [CHANGELOG.md](CHANGELOG.md)
 - **Songwünsche:** fehlt ein Song, wünscht man ihn sich in der Song-Übersicht (oder direkt aus einer leeren Suche) und sieht dort, ob er aufgenommen wurde
 - **Tagesrunde:** jeden Tag dieselben Songs für alle, bis die erste Karte danebenliegt; die längste Serie unter deinen Freunden gewinnt den Tag. Ein Versuch: pausieren und auf jedem Gerät weiterspielen geht, neu starten nicht. Danach ausgewählten Freunden per Mail Bescheid geben (die das im Profil abbestellen können)
 - **Ergebnis teilen** als Bild (WhatsApp und Co.) direkt vom Endbildschirm
@@ -313,6 +314,8 @@ GitHub Actions führt alles bei jedem Push aus ([`ci.yml`](.github/workflows/ci.
 ./scripts/deployment/deploy.sh api    # nur Backend
 ./scripts/deployment/deploy.sh web    # nur PWA
 ```
+
+[CHANGELOG.md](CHANGELOG.md) und die Liste in der App (`pwa/src/data/changelog.json`) schreibt `scripts/changelog.mjs` aus den Betreffzeilen der Release-Commits (`feat: vX.Y.Z — Zusammenfassung`) – nie von Hand bearbeiten. Es läuft vor jedem Build und im Deploy-Skript, das beide Dateien committet und pusht, wenn ein Release einen Eintrag ergänzt hat. Veröffentlicht werden nur Betreffzeilen, nie Commit-Texte, und jede Zeile läuft durch einen Filter, der bei allem abbricht, was nach Adresse, Serverpfad, Schlüssel oder Passwort aussieht.
 
 Einmalig auf dem Server: Geheimnisse in `/opt/mxtape-api/.env` (Vorlage `server/.env.example`) und die nginx-Locations aus `server/deploy/nginx-locations.conf`. Der Google-OAuth-Client (Webanwendung) braucht die Weiterleitungs-URI `https://mxtape.celox.io/api/auth/callback`; den Zustimmungsbildschirm veröffentlichen, sonst lässt Google nur eingetragene Testnutzer durch.
 

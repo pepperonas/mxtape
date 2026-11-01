@@ -54,7 +54,21 @@ deploy_api() {
   echo "✅ API läuft"
 }
 
+# The changelog is written from the release commits (scripts/changelog.mjs),
+# never by hand. When a release added an entry, commit and push it here, so
+# the repository and the page in the app always agree.
+update_changelog() {
+  echo "📝 Changelog …"
+  (cd "$PROJECT_ROOT" && node scripts/changelog.mjs)
+  if [ -n "$(cd "$PROJECT_ROOT" && git status --porcelain -- CHANGELOG.md pwa/src/data/changelog.json)" ]; then
+    (cd "$PROJECT_ROOT" && git commit -q -m "docs: changelog for v$(node -p "require('./pwa/package.json').version")" -- CHANGELOG.md pwa/src/data/changelog.json \
+      && git push -q && echo "✅ Changelog committed and pushed")
+  fi
+}
+
 deploy_web() {
+  update_changelog
+
   echo "🧪 PWA-Tests …"
   (cd "$PWA_DIR" && npx tsc --noEmit && npx vitest run --reporter=dot)
 

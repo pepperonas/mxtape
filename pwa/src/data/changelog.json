@@ -1,0 +1,458 @@
+[
+  {
+    "version": "0.30.0",
+    "date": "2026-11-01",
+    "type": "feat",
+    "summary": "a changelog in the settings, kept automatically"
+  },
+  {
+    "version": "0.29.1",
+    "date": "2026-11-01",
+    "type": "fix",
+    "summary": "wished songs cannot act as add-song options"
+  },
+  {
+    "version": "0.29.0",
+    "date": "2026-11-01",
+    "type": "feat",
+    "summary": "next song loaded ahead, year handicap, song requests"
+  },
+  {
+    "version": "0.28.8",
+    "date": "2026-11-01",
+    "type": "feat",
+    "summary": "holding a cover opens the Spotify app on phones"
+  },
+  {
+    "version": "0.28.7",
+    "date": "2026-11-01",
+    "type": "feat",
+    "summary": "hold an album cover in a round to open the song in Spotify"
+  },
+  {
+    "version": "0.28.6",
+    "date": "2026-11-01",
+    "type": "feat",
+    "summary": "personal edition with a designer sketch of the classic 911"
+  },
+  {
+    "version": "0.28.3",
+    "date": "2026-10-30",
+    "type": "fix",
+    "summary": "signing out no longer crashes with \"useMe outside the signed-in app\""
+  },
+  {
+    "version": "0.28.2",
+    "date": "2026-10-30",
+    "type": "fix",
+    "summary": "the dock card stays under the pointer while the page auto-scrolls"
+  },
+  {
+    "version": "0.28.1",
+    "date": "2026-10-30",
+    "type": "fix",
+    "summary": "dragging a card scrolls down too; clearer confetti for a right card"
+  },
+  {
+    "version": "0.28.0",
+    "date": "2026-10-30",
+    "type": "feat",
+    "summary": "every bot its own strength, and a form per round"
+  },
+  {
+    "version": "0.27.1",
+    "date": "2026-10-29",
+    "type": "fix",
+    "summary": "play/pause from a phone reaches only the connected screens"
+  },
+  {
+    "version": "0.27.0",
+    "date": "2026-10-29",
+    "type": "feat",
+    "summary": "connect a TV from any round, on one phone too"
+  },
+  {
+    "version": "0.26.0",
+    "date": "2026-10-29",
+    "type": "feat",
+    "summary": "\"Wusstest du?\" for 745 of 800 songs"
+  },
+  {
+    "version": "0.25.3",
+    "date": "2026-10-29",
+    "type": "fix",
+    "summary": "the home footer sits at the bottom edge of the screen"
+  },
+  {
+    "version": "0.25.2",
+    "date": "2026-10-29",
+    "type": "fix",
+    "summary": "the footer back on two lines, closer to the edge; the fact as its own card"
+  },
+  {
+    "version": "0.25.1",
+    "date": "2026-10-29",
+    "type": "fix",
+    "summary": "a compact home footer: links and version on one line"
+  },
+  {
+    "version": "0.25.0",
+    "date": "2026-10-29",
+    "type": "feat",
+    "summary": "300 more songs, 800 in all"
+  },
+  {
+    "version": "0.24.0",
+    "date": "2026-10-29",
+    "type": "feat",
+    "summary": "custom controls only, drag on /about, fixes from the review"
+  },
+  {
+    "version": "0.23.0",
+    "date": "2026-10-29",
+    "type": "feat",
+    "summary": "a product page and help at /about"
+  },
+  {
+    "version": "0.22.0",
+    "date": "2026-10-29",
+    "type": "feat",
+    "summary": "a footer on the home page: code, donate, rate"
+  },
+  {
+    "version": "0.21.3",
+    "date": "2026-10-29",
+    "type": "fix",
+    "summary": "the server picks the daily round itself"
+  },
+  {
+    "version": "0.21.2",
+    "date": "2026-10-29",
+    "type": "fix",
+    "summary": "the daily round's songs are fixed on the server for everyone"
+  },
+  {
+    "version": "0.21.1",
+    "date": "2026-10-29",
+    "type": "fix",
+    "summary": "one highlight while switching, not the old one lingering"
+  },
+  {
+    "version": "0.21.0",
+    "date": "2026-10-29",
+    "type": "feat",
+    "summary": "navigation regrouped, settings behind a gear"
+  },
+  {
+    "version": "0.20.0",
+    "date": "2026-10-29",
+    "type": "feat",
+    "summary": "the group's totals on the statistics page for everyone"
+  },
+  {
+    "version": "0.19.1",
+    "date": "2026-10-29",
+    "type": "fix",
+    "summary": "daily mails: atomic send slot, one per account and 20 hours"
+  },
+  {
+    "version": "0.19.0",
+    "date": "2026-10-29",
+    "type": "feat",
+    "summary": "daily round until the first wrong card, kept on the server, with a mail to friends"
+  },
+  {
+    "version": "0.18.0",
+    "date": "2026-10-29",
+    "type": "feat",
+    "summary": "double tap copies a song, and a library of all songs"
+  },
+  {
+    "version": "0.17.3",
+    "date": "2026-10-29",
+    "type": "fix",
+    "summary": "dragging a card scrolls the page only at the real edge, and gently"
+  },
+  {
+    "version": "0.17.2",
+    "date": "2026-10-29",
+    "type": "fix",
+    "summary": "the background waves glide into and out of play"
+  },
+  {
+    "version": "0.17.1",
+    "date": "2026-10-29",
+    "type": "fix",
+    "summary": "the cover leads the reveal, the record slides out behind it, the play button stays round"
+  },
+  {
+    "version": "0.17.0",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "covers on the timeline, in the history, behind the result and in the shared picture"
+  },
+  {
+    "version": "0.16.0",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "the cover slides out as a sleeve on reveal, its colour glows"
+  },
+  {
+    "version": "0.15.0",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "admin statistics"
+  },
+  {
+    "version": "0.14.7",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "online players get their own achievements"
+  },
+  {
+    "version": "0.14.6",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "in a rematch whoever came last starts"
+  },
+  {
+    "version": "0.14.5",
+    "date": "2026-10-28",
+    "type": "fix",
+    "summary": "answer matching for title and artist"
+  },
+  {
+    "version": "0.14.4",
+    "date": "2026-10-28",
+    "type": "fix",
+    "summary": "explain the 6950, no sideways scrolling at 320 px"
+  },
+  {
+    "version": "0.14.3",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "info button on the rank card lists every rank with its points"
+  },
+  {
+    "version": "0.14.2",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "scores and hit counts in the poster face"
+  },
+  {
+    "version": "0.14.1",
+    "date": "2026-10-28",
+    "type": "fix",
+    "summary": "achievements page shows the leaderboard first, then the picked person's rank"
+  },
+  {
+    "version": "0.14.0",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "achievement points, ranks and a leaderboard"
+  },
+  {
+    "version": "0.13.0",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "record motor, ranking reveal, \"new\" achievements, empty states"
+  },
+  {
+    "version": "0.12.9",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "page changes with a direction, skeletons"
+  },
+  {
+    "version": "0.12.8",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "choose a colour (five schemes, light and dark)"
+  },
+  {
+    "version": "0.12.7",
+    "date": "2026-10-28",
+    "type": "fix",
+    "summary": "achievements audited and judged from the turn log"
+  },
+  {
+    "version": "0.12.6",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "50 achievements"
+  },
+  {
+    "version": "0.12.5",
+    "date": "2026-10-28",
+    "type": "fix",
+    "summary": "back navigation no longer stacks pages"
+  },
+  {
+    "version": "0.12.4",
+    "date": "2026-10-28",
+    "type": "fix",
+    "summary": "bots listen 3–6 s; review fixes"
+  },
+  {
+    "version": "0.12.3",
+    "date": "2026-10-28",
+    "type": "fix",
+    "summary": "achievements are tracked in every mode"
+  },
+  {
+    "version": "0.12.2",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "setup options and lobby bots/teams survive a reload"
+  },
+  {
+    "version": "0.12.1",
+    "date": "2026-10-28",
+    "type": "fix",
+    "summary": "screens join in the lobby only, takeover fails closed"
+  },
+  {
+    "version": "0.12.0",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "host takeover, TV mode, bots and teams online"
+  },
+  {
+    "version": "0.11.0",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "song reports, start points, themes, bonus jokers, daily round, share picture"
+  },
+  {
+    "version": "0.10.2",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "200 more well-known songs (500 in total)"
+  },
+  {
+    "version": "0.10.1",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "place until the song has been heard to the end"
+  },
+  {
+    "version": "0.10.0",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "online step clock, nobody can hold a round"
+  },
+  {
+    "version": "0.9.9",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "fair objection window online, host acts only for the absent"
+  },
+  {
+    "version": "0.9.8",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "music on the device on turn, sturdier online rounds"
+  },
+  {
+    "version": "0.9.7",
+    "date": "2026-10-28",
+    "type": "feat",
+    "summary": "sign up with e-mail and password, account offer after online rounds"
+  },
+  {
+    "version": "0.9.6",
+    "date": "2026-10-27",
+    "type": "fix",
+    "summary": "online objection button without one's own name"
+  },
+  {
+    "version": "0.9.5",
+    "date": "2026-10-27",
+    "type": "feat",
+    "summary": "online rounds notice who is gone"
+  },
+  {
+    "version": "0.9.4",
+    "date": "2026-10-27",
+    "type": "feat",
+    "summary": "drag the waiting card again, subtle vibration, motion polish"
+  },
+  {
+    "version": "0.9.3",
+    "date": "2026-10-27",
+    "type": "fix",
+    "summary": "statistics cards view for shared-timeline rounds"
+  },
+  {
+    "version": "0.9.2",
+    "date": "2026-10-27",
+    "type": "feat",
+    "summary": "sound waves as background, redrawn record, fact bulb aligned"
+  },
+  {
+    "version": "0.9.1",
+    "date": "2026-10-27",
+    "type": "feat",
+    "summary": "background record: grooves with a sheen that turns faster while a song plays"
+  },
+  {
+    "version": "0.9.0",
+    "date": "2026-10-27",
+    "type": "feat",
+    "summary": "German and English, imprint, privacy policy, terms, account deletion"
+  },
+  {
+    "version": "0.8.1",
+    "date": "2026-10-27",
+    "type": "feat",
+    "summary": "English addresses, old German ones redirect"
+  },
+  {
+    "version": "0.8.0",
+    "date": "2026-10-27",
+    "type": "feat",
+    "summary": "rename mxster to mxtape"
+  },
+  {
+    "version": "0.7.0",
+    "date": "2026-10-27",
+    "type": "feat",
+    "summary": "multiplayer on own devices, guests by link, friends"
+  },
+  {
+    "version": "0.6.0",
+    "date": "2026-10-27",
+    "type": "feat",
+    "summary": "statistics with spider web, player management, turn log"
+  },
+  {
+    "version": "0.5.1",
+    "date": "2026-10-27",
+    "type": "feat",
+    "summary": "audio as AAC (1.3 GB → 790 MB), exotics off by default"
+  },
+  {
+    "version": "0.5.0",
+    "date": "2026-10-27",
+    "type": "feat",
+    "summary": "resume, Einspruch, decades, round length, teams, song info; icons instead of emoji"
+  },
+  {
+    "version": "0.4.0",
+    "date": "2026-10-26",
+    "type": "feat",
+    "summary": "sign-in with Google and an approval queue, virtual play only, a new design"
+  },
+  {
+    "version": "0.3.0",
+    "date": "2026-10-04",
+    "type": "feat",
+    "summary": "Material 3 Expressive motion & physics"
+  },
+  {
+    "version": "0.2.0",
+    "date": "2026-07-21",
+    "type": "feat",
+    "summary": "Material 3 Expressive redesign"
+  }
+]

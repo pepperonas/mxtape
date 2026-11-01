@@ -20,6 +20,7 @@ import { PlayersScreen, PlayerDetailScreen } from '@/screens/PlayersScreen'
 import { JoinScreen } from '@/screens/JoinScreen'
 import { RoomScreen } from '@/screens/RoomScreen'
 import { ProfileScreen } from '@/screens/ProfileScreen'
+import { ChangelogScreen } from '@/screens/ChangelogScreen'
 import { AdminScreen } from '@/screens/AdminScreen'
 import { AboutScreen } from '@/screens/AboutScreen'
 import { TvScreen } from '@/screens/TvScreen'
@@ -132,6 +133,7 @@ const router = createBrowserRouter([
           { path: '/players/:name', element: <PlayerDetailScreen /> },
           { path: '/achievements', element: <AchievementsScreen /> },
           { path: '/settings', element: <ProfileScreen /> },
+          { path: '/settings/changelog', element: <ChangelogScreen /> },
           { path: '/profile', element: <Navigate to="/settings" replace /> },
           { path: '/admin', element: <AdminScreen /> },
           ...legacyRoutes(true),

@@ -56,7 +56,9 @@ export const profileText = defineMessages({
     about: 'Über mxtape',
     help: 'Anleitung und Hilfe',
     helpText: 'Wie eine Runde läuft, alle Spielarten, häufige Fragen',
-    version: 'Version'
+    version: 'Version',
+    changelog: 'Changelog',
+    changelogText: 'Was sich in jeder Version geändert hat (auf Englisch)'
   },
   en: {
     wipeTitle: 'Delete all game data?',
@@ -113,6 +115,8 @@ export const profileText = defineMessages({
     about: 'About mxtape',
     help: 'Guide and help',
     helpText: 'How a turn works, all modes, common questions',
-    version: 'Version'
+    version: 'Version',
+    changelog: 'Changelog',
+    changelogText: 'What changed in every version'
   }
 })
