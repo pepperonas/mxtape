@@ -636,3 +636,64 @@ describe('daily round: until the first wrong card, booked on the server song by 
     vi.unstubAllGlobals()
   })
 })
+
+describe('the next song is loaded ahead', () => {
+  async function prefetchSetup(canPrefetch: () => boolean) {
+    const { getPreviewPlayer } = await import('@/services/PreviewPlayerService')
+    const preload = vi.spyOn(getPreviewPlayer(), 'preload').mockImplementation(() => {})
+    const hook = renderHook(
+      () => {
+        const game = useGame()
+        const flow = useTurnFlow({ onGameOver: vi.fn(), onSkipNotice: vi.fn(), canPrefetch })
+        return { game, flow }
+      },
+      { wrapper }
+    )
+    act(() => {
+      hook.result.current.game.setGameMode('timeline_personal' as never)
+      hook.result.current.game.addPlayer('A')
+      hook.result.current.game.addPlayer('B')
+    })
+    return { preload, get: () => hook.result.current }
+  }
+
+  it('while waiting to draw, and the draw takes exactly that song', async () => {
+    const t = await prefetchSetup(() => true)
+    await waitFor(() => expect(t.preload).toHaveBeenCalled())
+    const ahead = t.preload.mock.calls[t.preload.mock.calls.length - 1][0] as Song
+    let drawn: Song | null = null
+    act(() => {
+      drawn = t.get().flow.drawSong()
+    })
+    expect(drawn!.id).toBe(ahead.id)
+  })
+
+  it('after the reveal, for the next turn — a different song', async () => {
+    const t = await prefetchSetup(() => true)
+    act(() => {
+      t.get().flow.drawSong()
+    })
+    const first = t.get().game.currentSong!
+    t.preload.mockClear()
+    act(() => t.get().flow.placeCard(0))
+    expect(t.get().flow.phase).toBe('revealed')
+    await waitFor(() => expect(t.preload).toHaveBeenCalled())
+    const next = t.preload.mock.calls[t.preload.mock.calls.length - 1][0] as Song
+    expect(next.id).not.toBe(first.id)
+    act(() => t.get().flow.continueTurn())
+    act(() => {
+      t.get().flow.drawSong()
+    })
+    expect(t.get().game.currentSong!.id).toBe(next.id)
+  })
+
+  it('nothing is loaded on a device without the music', async () => {
+    const t = await prefetchSetup(() => false)
+    act(() => {
+      t.get().flow.drawSong()
+    })
+    act(() => t.get().flow.placeCard(0))
+    await new Promise((r) => setTimeout(r, 20))
+    expect(t.preload).not.toHaveBeenCalled()
+  })
+})

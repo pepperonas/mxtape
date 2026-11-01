@@ -43,6 +43,8 @@ export type ChallengeOutcome = 'placer' | 'challenger' | 'nobody'
 
 export interface ChallengeResolution {
   placerCorrect: boolean
+  /** The placer was right only thanks to their year tolerance. */
+  placerByTolerance?: boolean
   /** null when nobody challenged. */
   challengerCorrect: boolean | null
   outcome: ChallengeOutcome
@@ -52,11 +54,16 @@ export function resolveChallenge(
   timeline: Song[],
   song: Song,
   placerGap: number,
-  claim: ChallengeClaim | null
+  claim: ChallengeClaim | null,
+  /** Year tolerance (game/tolerance) of the placer and of the objecting player. */
+  tolerance: { placer?: number; challenger?: number } = {}
 ): ChallengeResolution {
-  const placerCorrect = evaluatePlacement(timeline, song, placerGap).isCorrect
-  if (!claim) return { placerCorrect, challengerCorrect: null, outcome: placerCorrect ? 'placer' : 'nobody' }
-  const challengerCorrect = evaluatePlacement(timeline, song, claim.gapIndex).isCorrect
+  const placed = evaluatePlacement(timeline, song, placerGap, tolerance.placer ?? 0)
+  const placerCorrect = placed.isCorrect
+  // Only said when it applies (rounds without a handicap keep their old shape)
+  const extra = placed.byTolerance ? { placerByTolerance: true } : {}
+  if (!claim) return { placerCorrect, ...extra, challengerCorrect: null, outcome: placerCorrect ? 'placer' : 'nobody' }
+  const challengerCorrect = evaluatePlacement(timeline, song, claim.gapIndex, tolerance.challenger ?? 0).isCorrect
   const outcome: ChallengeOutcome = placerCorrect ? 'placer' : challengerCorrect ? 'challenger' : 'nobody'
-  return { placerCorrect, challengerCorrect, outcome }
+  return { placerCorrect, ...extra, challengerCorrect, outcome }
 }

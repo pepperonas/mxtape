@@ -10,6 +10,7 @@ import { AnimatedNumber } from '@/components/ui/AnimatedNumber'
 import { spring } from '@/motion/springs'
 import { activeMember, initialOf } from '@/game/teams'
 import { ChallengeDots } from './PlacementDock'
+import { toleranceOf } from '@/game/tolerance'
 import { useMessages } from '@/i18n'
 import { gameText } from '@/i18n/messages/game'
 
@@ -68,6 +69,12 @@ export function PlayerStrip({ thinking = false }: { thinking?: boolean }) {
                   <span className="opacity-80" title={t.objectionsLeft(p.challenges ?? 0)}>
                     <ChallengeDots left={p.challenges ?? 0} />
                     <span className="sr-only">, {t.objectionsLeft(p.challenges ?? 0)}</span>
+                  </span>
+                )}
+                {toleranceOf(p) > 0 && (
+                  <span className="opacity-80 tabular" data-strip-tolerance title={t.toleranceLabel(toleranceOf(p))}>
+                    ±{toleranceOf(p)}
+                    <span className="sr-only">, {t.toleranceLabel(toleranceOf(p))}</span>
                   </span>
                 )}
                 {(p.jokers ?? 0) > 0 && (

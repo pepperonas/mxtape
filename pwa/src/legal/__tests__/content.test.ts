@@ -77,6 +77,16 @@ describe('privacy policy matches the code', () => {
     expect(table).not.toMatch(/DateTime/)
   })
 
+  it('names song requests: kept until decided, deleted the stated days after, and with the account', () => {
+    const days = Number(num(server('api/wishes.py'), /WISH_KEEP_DAYS = (\d+)/))
+    expect(text('de')).toContain(`entschiedene lösche ich ${days} Tage danach`)
+    expect(text('en')).toContain(`decided ones are deleted ${days} days later`)
+    expect(server('api/wishes.py')).toMatch(/SongWish\.resolved_at\.is_not\(None\), SongWish\.resolved_at < cutoff/)
+    const table = /class SongWish[\s\S]*?\n\n\n/.exec(server('db.py'))![0]
+    expect(table).toContain('ondelete="CASCADE"')
+    expect(text('de')).toContain('Songwünsche und deine Räume')
+  })
+
   it('names song reports, and they are deleted with the account', () => {
     expect(server('db.py')).toMatch(/class SongReport[\s\S]*?ForeignKey\("users\.id", ondelete="CASCADE"\)/)
     expect(text('de')).toContain('Meldest du einen Song')

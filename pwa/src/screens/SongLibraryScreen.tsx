@@ -10,6 +10,8 @@ import type { Song } from '@/types'
 import { Icon } from '@/components/ui/Icon'
 import { Dropdown } from '@/components/ui/Dropdown'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { SongWishButton, SongWishCorner } from '@/components/library/SongWish'
+import { wishText } from '@/i18n/messages/wishes'
 import { SongTile, SongRow } from '@/components/library/SongTile'
 import { SongDetail } from '@/components/library/SongDetail'
 import { allSongs } from '@/data/catalogue'
@@ -55,6 +57,7 @@ function activeFilters(f: Filters): number {
 
 export function SongLibraryScreen() {
   const t = useMessages(libraryText)
+  const w = useMessages(wishText)
   const setup = useMessages(setupText)
   const { lang } = useLang()
   const { showModal } = useUI()
@@ -256,10 +259,22 @@ export function SongLibraryScreen() {
             title={t.nothingTitle}
             text={t.nothingText}
             action={
-              hint ? (
-                <button type="button" className="btn btn-tonal m3-state-layer" onClick={() => setTyped(hint)}>
-                  {t.didYouMean(hint)}
-                </button>
+              hint || state.q.trim() ? (
+              <div className="flex flex-wrap justify-center gap-2">
+                {hint && (
+                  <button type="button" className="btn btn-tonal m3-state-layer" onClick={() => setTyped(hint)}>
+                    {t.didYouMean(hint)}
+                  </button>
+                )}
+                {/* Not in the game: ask for it, the search as the title */}
+                {state.q.trim() && (
+                  <SongWishButton
+                    className={hint ? 'btn btn-text m3-state-layer' : 'btn btn-tonal m3-state-layer'}
+                    prefill={{ title: state.q.trim() }}
+                    label={w.wishFor(state.q.trim())}
+                  />
+                )}
+              </div>
               ) : undefined
             }
           />
@@ -299,6 +314,9 @@ export function SongLibraryScreen() {
           ))}
         </div>
       )}
+      <div className="mt-8">
+        <SongWishCorner />
+      </div>
     </div>
   )
 }

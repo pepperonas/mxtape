@@ -23,18 +23,31 @@ export function timelineSongsFor(
 
 export interface PlacementEvaluation {
   isCorrect: boolean
+  /** Right only thanks to the player's year tolerance (game/tolerance): the card sits where it belongs. */
+  byTolerance: boolean
   /** Timeline with the song inserted at the chosen gap (whether or not correct). */
   newTimeline: Song[]
   /** The timeline was empty — this is the starting card. */
   isFirstCard: boolean
 }
 
-export function evaluatePlacement(timeline: Song[], song: Song, gapIndex: number): PlacementEvaluation {
+export function evaluatePlacement(timeline: Song[], song: Song, gapIndex: number, tolerance = 0): PlacementEvaluation {
   const index = Math.max(0, Math.min(gapIndex, timeline.length))
   const newTimeline = [...timeline]
   newTimeline.splice(index, 0, song)
-  const isCorrect = newTimeline.every((s, i) => i === 0 || s.year >= newTimeline[i - 1].year)
-  return { isCorrect, newTimeline, isFirstCard: timeline.length === 0 }
+  const exact = newTimeline.every((s, i) => i === 0 || s.year >= newTimeline[i - 1].year)
+  const isFirstCard = timeline.length === 0
+  if (exact || tolerance <= 0) return { isCorrect: exact, byTolerance: false, newTimeline, isFirstCard }
+  // Year tolerance: the neighbours may be off by up to `tolerance` years. The
+  // card then goes where it really belongs, so the timeline stays in order.
+  const before = timeline[index - 1]
+  const after = timeline[index]
+  const fits = (!before || song.year >= before.year - tolerance) && (!after || song.year <= after.year + tolerance)
+  if (!fits) return { isCorrect: false, byTolerance: false, newTimeline, isFirstCard }
+  const sorted = [...timeline]
+  const at = sorted.findIndex((s) => s.year > song.year)
+  sorted.splice(at === -1 ? sorted.length : at, 0, song)
+  return { isCorrect: true, byTolerance: true, newTimeline: sorted, isFirstCard }
 }
 
 /** Human-readable gap description (app language), also used as the gap's accessible name. */

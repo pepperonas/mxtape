@@ -160,6 +160,24 @@ class SongReport(Base):
     resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
+class SongWish(Base):
+    """Someone misses a song: artist + title as typed, for the admin to add.
+
+    `key` groups the same wish from several people (lowercase, accents and
+    punctuation gone). Done wishes are deleted after WISH_KEEP_DAYS."""
+
+    __tablename__ = "song_wishes"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    key: Mapped[str] = mapped_column(String(240), index=True)
+    artist: Mapped[str] = mapped_column(String(100))
+    title: Mapped[str] = mapped_column(String(120))
+    note: Mapped[str] = mapped_column(String(200), default="")
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    outcome: Mapped[str | None] = mapped_column(String(16), nullable=True)
+
+
 class SongOverride(Base):
     """A correction made in the admin area: applies to every round at once,
     without a new build (the bundled song list stays the default)."""

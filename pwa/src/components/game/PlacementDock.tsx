@@ -78,6 +78,8 @@ export type DockState =
       challenge: { name: string; won: boolean } | null
       /** Wrong card: where it would have belonged ("Zwischen 1991 und 2003"). */
       rightPlace?: string
+      /** Right only thanks to the placer's year handicap (its size in years). */
+      byTolerance?: number
       /** Online: who continues, when it is not this device. */
       continueBy?: string
       /** Bonus option: what the placer named, judged. */
@@ -455,9 +457,14 @@ function verdictText(
   if (isFirstCard) return { title: t.startCardPlaced, good: true }
   if (!challenge)
     return isCorrect
-      ? { title: t.placedRight, good: true }
+      ? { title: t.placedRight, detail: state.byTolerance ? t.rightByTolerance(state.byTolerance) : undefined, good: true }
       : { title: t.wrong, detail: state.rightPlace ? t.rightWouldBe(state.rightPlace) : undefined, good: false }
-  if (isCorrect) return { title: t.placedRight, detail: t.objectionMissed(challenge.name), good: true }
+  if (isCorrect)
+    return {
+      title: t.placedRight,
+      detail: [state.byTolerance ? t.rightByTolerance(state.byTolerance) : '', t.objectionMissed(challenge.name)].filter(Boolean).join(' '),
+      good: true
+    }
   if (challenge.won) return { title: t.objectionWon, detail: t.getsCard(challenge.name), good: true }
   return { title: t.bothWrong, detail: t.nobodyGetsCard, good: false }
 }

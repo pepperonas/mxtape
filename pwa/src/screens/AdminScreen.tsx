@@ -17,6 +17,7 @@ import { formatDay, formatTime } from '@/utils/format'
 import { msg, useMessages } from '@/i18n'
 import { adminText } from '@/i18n/messages/admin'
 import { apiErrorText } from '@/i18n/messages/errors'
+import { AdminWishes, useWishCount } from './AdminWishes'
 import { AdminReports, useReportCount } from './AdminReports'
 import { AdminStats } from './AdminStats'
 
@@ -35,17 +36,18 @@ interface Account {
 }
 
 type Action = 'approve' | 'reject' | 'block' | 'unblock' | 'reset'
-type Tab = 'pending' | 'approved' | 'closed' | 'reports' | 'stats'
+type Tab = 'pending' | 'approved' | 'closed' | 'reports' | 'wishes' | 'stats'
 
-const TABS: { id: Tab; label: 'tabPending' | 'tabApproved' | 'tabClosed' | 'tabReports' | 'tabStats' }[] = [
+const TABS: { id: Tab; label: 'tabPending' | 'tabApproved' | 'tabClosed' | 'tabReports' | 'tabWishes' | 'tabStats' }[] = [
   { id: 'pending', label: 'tabPending' },
   { id: 'approved', label: 'tabApproved' },
   { id: 'closed', label: 'tabClosed' },
   { id: 'reports', label: 'tabReports' },
+  { id: 'wishes', label: 'tabWishes' },
   { id: 'stats', label: 'tabStats' }
 ]
 
-const inTab = (a: Account, tab: Exclude<Tab, 'reports' | 'stats'>) => (tab === 'closed' ? a.status === 'rejected' || a.status === 'blocked' : a.status === tab)
+const inTab = (a: Account, tab: Exclude<Tab, 'reports' | 'wishes' | 'stats'>) => (tab === 'closed' ? a.status === 'rejected' || a.status === 'blocked' : a.status === tab)
 
 /** The action that restores a previous status (for undo). */
 const RESTORE: Record<AccountStatus, Action> = { pending: 'reset', approved: 'approve', rejected: 'reject', blocked: 'block' }
@@ -61,6 +63,9 @@ export function AdminScreen() {
   const initialReports = useReportCount()
   const [reportCount, setReportCount] = useState<number | null>(null)
   const openReports = reportCount ?? initialReports
+  const initialWishes = useWishCount()
+  const [wishCount, setWishCount] = useState<number | null>(null)
+  const openWishes = wishCount ?? initialWishes
 
   useEffect(() => {
     if (!me.isAdmin) navigate('/', { replace: true })
@@ -104,9 +109,10 @@ export function AdminScreen() {
     pending: accounts?.filter((a) => inTab(a, 'pending')).length ?? 0,
     approved: accounts?.filter((a) => inTab(a, 'approved')).length ?? 0,
     closed: accounts?.filter((a) => inTab(a, 'closed')).length ?? 0,
-    reports: openReports
+    reports: openReports,
+    wishes: openWishes
   }
-  const shown = tab === 'reports' || tab === 'stats' ? [] : (accounts?.filter((a) => inTab(a, tab)) ?? [])
+  const shown = tab === 'reports' || tab === 'wishes' || tab === 'stats' ? [] : (accounts?.filter((a) => inTab(a, tab)) ?? [])
 
   return (
     <div>
@@ -126,7 +132,7 @@ export function AdminScreen() {
             >
               <span className="inline-flex items-center gap-2">
                 {t[tab_.label]}
-                {(tab_.id === 'pending' || tab_.id === 'reports') && counts[tab_.id] > 0 && (
+                {(tab_.id === 'pending' || tab_.id === 'reports' || tab_.id === 'wishes') && counts[tab_.id] > 0 && (
                   <span
                     className={`grid place-items-center min-w-6 h-6 px-1.5 rounded-full text-label-md tabular ${
                       'bg-md-error text-md-on-error'
@@ -151,6 +157,10 @@ export function AdminScreen() {
       ) : tab === 'reports' ? (
         <div className="pt-4" role="tabpanel">
           <AdminReports onCount={setReportCount} />
+        </div>
+      ) : tab === 'wishes' ? (
+        <div className="pt-4" role="tabpanel">
+          <AdminWishes onCount={setWishCount} />
         </div>
       ) : (
       <div className="pt-4" role="tabpanel">
@@ -244,7 +254,7 @@ function describe(t: (typeof adminText)['de'], a: Account): string {
   }
 }
 
-function EmptyTab({ tab }: { tab: Exclude<Tab, 'reports' | 'stats'> }) {
+function EmptyTab({ tab }: { tab: Exclude<Tab, 'reports' | 'wishes' | 'stats'> }) {
   const t = useMessages(adminText)
   const copy = {
     pending: [t.emptyPendingTitle, t.emptyPendingText],

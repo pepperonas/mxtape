@@ -29,6 +29,12 @@ export const setupText = defineMessages({
     add: 'Hinzufügen',
     earlierPlayers: 'Frühere Mitspieler',
 
+    handicap: 'Jahres-Ausgleich',
+    handicapHint: 'Für gemischte Runden: Wer weniger Musik kennt, darf beim Jahr ein paar Jahre daneben liegen. Tippe auf die Zahl bei einem Namen.',
+    toleranceChip: (n: number) => (n === 0 ? '±0' : `±${n} J.`),
+    toleranceOf: (name: string, n: number) =>
+      n === 0 ? `Ausgleich für ${name}: keiner. Tippen zum Ändern` : `Ausgleich für ${name}: ±${n} ${n === 1 ? 'Jahr' : 'Jahre'}. Tippen zum Ändern`,
+
     botsHeading: 'Gegen den Computer',
     botsHint: 'Allein? Dann spielen Bots gegen dich.',
     botsSwitch: 'Gegen den Computer spielen',
@@ -120,6 +126,12 @@ export const setupText = defineMessages({
     addName: 'Add a name',
     add: 'Add',
     earlierPlayers: 'Earlier players',
+
+    handicap: 'Year handicap',
+    handicapHint: 'For mixed groups: whoever knows less music may be a few years off. Tap the number next to a name.',
+    toleranceChip: (n: number) => (n === 0 ? '±0' : `±${n} y`),
+    toleranceOf: (name: string, n: number) =>
+      n === 0 ? `Handicap for ${name}: none. Tap to change` : `Handicap for ${name}: ±${n} ${n === 1 ? 'year' : 'years'}. Tap to change`,
 
     botsHeading: 'Against the computer',
     botsHint: 'On your own? Then bots play against you.',

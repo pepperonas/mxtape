@@ -75,6 +75,16 @@ def notify_song_report(song_id: str, reason: str, note: str, by: str) -> None:
     )
 
 
+def notify_song_wish(artist: str, title: str, note: str, by: str) -> None:
+    """First open wish for a song: tell the admin (later ones only count up)."""
+    s = get_settings()
+    send_later(
+        s.notify_email,
+        f"mxtape: Songwunsch {artist} – {title}",
+        f"{by} wünscht sich „{title}“ von {artist}." + (f"\n\n  „{note}“" if note else "") + f"\n\nAnsehen: {_url('/admin')}\n",
+    )
+
+
 _SIGN = {"de": "\n\nmxtape\n{url}\n", "en": "\n\nmxtape\n{url}\n"}
 
 

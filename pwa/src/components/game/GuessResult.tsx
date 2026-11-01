@@ -18,7 +18,7 @@ import { gameText } from '@/i18n/messages/game'
 
 interface GuessResultProps {
   song: Song
-  check: { titleMatch: boolean; artistMatch: boolean; yearDifference: number }
+  check: { titleMatch: boolean; artistMatch: boolean; yearDifference: number; tolerance?: number }
   breakdown: GuessBreakdown
   playerName: string
   onContinue: () => void
@@ -48,7 +48,9 @@ export function GuessResult({ song, check, breakdown, playerName, onContinue, co
       points: breakdown.year,
       note:
         yearState === 'near'
-          ? t.yearsOff(check.yearDifference)
+          ? check.tolerance
+            ? `${t.yearsOff(check.yearDifference)} · ${t.yearByTolerance(check.tolerance)}`
+            : t.yearsOff(check.yearDifference)
           : undefined
     }
   ] as const

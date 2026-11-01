@@ -20,7 +20,7 @@ export interface LegalDoc {
 }
 export type LegalKind = 'imprint' | 'privacy' | 'terms'
 
-export const LEGAL_UPDATED = '2026-10-29'
+export const LEGAL_UPDATED = '2026-11-01'
 
 const PROVIDER = ['Martin Pfeffer', 'celox.io', 'Flughafenstraße 24', '12053 Berlin']
 const MAIL = 'martin.pfeffer@celox.io'
@@ -149,6 +149,7 @@ const privacy: Record<Lang, LegalDoc> = {
           'Spielst du die Tagesrunde, speichere ich deinen Stand Song für Song (Tag, Zahl der Songs, deine Serie, Beginn und Ende), damit du pausieren und auf jedem Gerät weiterspielen kannst. Deine Freunde sehen Serie und Stand mit Name und Profilbild; nach 60 Tagen wird alles gelöscht. Nach der Runde kannst du ausgewählten Freunden eine Mail schicken lassen: Sie enthält deinen Namen und deine Serie, deine Adresse und die der Freunde sieht niemand sonst, und es geht höchstens eine solche Mail pro Tag raus. Wer solche Mails nicht möchte, schaltet sie im Profil ab.',
           'Deine Erfolgspunkte (die Summe und wie viele Erfolge du hast) speichere ich, damit deine Freunde sich auf der Erfolge-Seite mit dir vergleichen können; sie sehen sie mit Name und Profilbild. Die Erfolge selbst und die Punkte anderer Leute auf deinem Konto werden nicht geteilt. Die Zahl wird bei jeder Änderung ersetzt und mit dem Konto gelöscht.',
           'Meldest du einen Song („Stimmt was nicht?“), speichere ich Song, Grund, deinen freiwilligen Hinweis und dein Konto, damit ich nachfragen kann. Meldungen bleiben gespeichert, bis du dein Konto löschst.',
+          'Wünschst du dir einen Song („Song wünschen“), speichere ich Interpret, Titel, deine freiwillige Anmerkung und dein Konto; ich sehe deinen Namen beim Wunsch, du siehst in der Song-Übersicht, was daraus wurde. Offene Wünsche bleiben, bis ich sie entschieden habe; entschiedene lösche ich 90 Tage danach.',
           'Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.'
         ]
       },
@@ -175,7 +176,7 @@ const privacy: Record<Lang, LegalDoc> = {
       {
         heading: '12. Speicherdauer und Löschen',
         body: [
-          'Dein Konto und deine Spieldaten bleiben gespeichert, bis du sie löschst. Im Profil kannst du jederzeit nur die Spieldaten oder das ganze Konto löschen; beim Löschen des Kontos entfernt der Server sofort Konto, Sitzungen, Spieldaten, Freundschaften, Einladungen, Tagesrunden-Ergebnisse, Erfolgspunkte, Aktivitätstage, Song-Meldungen und deine Räume.',
+          'Dein Konto und deine Spieldaten bleiben gespeichert, bis du sie löschst. Im Profil kannst du jederzeit nur die Spieldaten oder das ganze Konto löschen; beim Löschen des Kontos entfernt der Server sofort Konto, Sitzungen, Spieldaten, Freundschaften, Einladungen, Tagesrunden-Ergebnisse, Erfolgspunkte, Aktivitätstage, Song-Meldungen, Songwünsche und deine Räume.',
           'Abgelehnte und gesperrte Konten bewahre ich auf, damit die Entscheidung bei einer erneuten Anmeldung erhalten bleibt; auf Anfrage lösche ich sie.',
           'Der Server wird jede Nacht verschlüsselt gesichert; Sicherungen werden nach spätestens rund einem Monat überschrieben. Gelöschte Daten verschwinden daher spätestens dann auch aus den Sicherungen.'
         ]
@@ -268,6 +269,7 @@ const privacy: Record<Lang, LegalDoc> = {
           'If you play the daily round, I store your progress song by song (day, number of songs, your streak, start and end), so you can pause and carry on on any device. Your friends see the streak and the progress with your name and profile picture; everything is deleted after 60 days. After the round you can have an email sent to friends you choose: it contains your name and your streak, nobody else sees your address or theirs, and at most one such email goes out per day. Anyone who does not want these emails turns them off in the profile.',
           'I store your achievement points (the total and how many achievements you have) so your friends can compare with you on the achievements page; they see them with your name and profile picture. The achievements themselves and the points of other people on your account are not shared. The number is replaced on every change and deleted with the account.',
           'If you report a song ("Something wrong?"), I store the song, the reason, your optional note and your account so I can ask back. Reports stay stored until you delete your account.',
+          'If you request a song ("Request a song"), I store artist, title, your optional note and your account; I see your name with the request, and you see in the song library what became of it. Open requests stay until I have decided; decided ones are deleted 90 days later.',
           'Legal basis: Art. 6 (1) (b) GDPR.'
         ]
       },
@@ -294,7 +296,7 @@ const privacy: Record<Lang, LegalDoc> = {
       {
         heading: '12. Retention and deletion',
         body: [
-          'Your account and game data are kept until you delete them. In your profile you can delete just the game data or the whole account at any time; deleting the account immediately removes account, sessions, game data, friendships, invitations, daily results, achievement points, activity days, song reports and your rooms from the server.',
+          'Your account and game data are kept until you delete them. In your profile you can delete just the game data or the whole account at any time; deleting the account immediately removes account, sessions, game data, friendships, invitations, daily results, achievement points, activity days, song reports, song requests and your rooms from the server.',
           'I keep rejected and blocked accounts so that the decision still applies if you sign in again; I delete them on request.',
           'The server is backed up every night in encrypted form; backups are overwritten after about a month at the latest. Deleted data therefore also disappears from the backups by then.'
         ]

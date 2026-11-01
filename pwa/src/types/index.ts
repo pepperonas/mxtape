@@ -57,6 +57,8 @@ export interface Player {
   left?: boolean
   /** Bonus option: jokers earned by naming title and artist (game/bonus). */
   jokers?: number
+  /** Year tolerance in years (game/tolerance): a handicap for mixed groups. */
+  tolerance?: number
 }
 
 // ============================================================================

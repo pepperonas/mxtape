@@ -237,6 +237,8 @@ export function GameRound({ onRematch }: { onRematch: () => void }) {
     [showModal, t]
   )
 
+  /** This device has the music (set below, read by the flow after render). */
+  const playsMusic = useRef(false)
   const localFlow = useTurnFlow({
     onGameOver: (winner, finalPlayers) => {
       getPreviewPlayer().stop()
@@ -251,7 +253,9 @@ export function GameRound({ onRematch }: { onRematch: () => void }) {
         }
       : showSkipNotice,
     // Online only the host's device plays the bots
-    runBots: !onlinePlayer
+    runBots: !onlinePlayer,
+    // Load the next song ahead only where the music plays
+    canPrefetch: () => playsMusic.current
   })
   const remoteFlow = useRemoteTurnFlow(room?.sendIntent ?? (noop as (i: Intent) => void))
   const flow = onlinePlayer ? remoteFlow : localFlow
@@ -349,6 +353,7 @@ export function GameRound({ onRematch }: { onRematch: () => void }) {
     musicAtSeat,
     isHost: onlineHost
   })
+  playsMusic.current = audioRole === 'local' || audioRole === 'host'
   const musicAt = screen ? screen.name : online && room!.info?.music !== 'everyone' ? room!.members.find((m) => m.seat === musicAtSeat)?.name : undefined
   const choosing = phase === 'challenge' && pending?.choosing != null ? pending.choosing : null
 
@@ -422,6 +427,7 @@ export function GameRound({ onRematch }: { onRematch: () => void }) {
           playerName: players[placementReveal.playerIndex]?.name ?? '',
           challenge: challenge ? { name: players[challenge.playerIndex]?.name ?? '', won: challenge.won } : null,
           rightPlace: rightPlaceFor(placementReveal.isCorrect, placementReveal.song),
+          byTolerance: placementReveal.byTolerance,
           continueBy: can('continue') ? undefined : nameAt(placementReveal.playerIndex),
           naming: placementReveal.naming ?? null
         }

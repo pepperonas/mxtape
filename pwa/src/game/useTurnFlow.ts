@@ -46,6 +46,12 @@ import { modesText } from '@/i18n/messages/modes'
 import { dailyText } from '@/i18n/messages/daily'
 import { dailyRunOver } from './daily'
 import { reportDailyTurn } from './dailyReport'
+import { toleranceOf } from './tolerance'
+import { poolKey, usableUpcoming, type Upcoming } from './upcoming'
+import { startPosition } from './startPosition'
+import { getPreviewPlayer } from '@/services/PreviewPlayerService'
+import { preloadCover } from '@/utils/coverColor'
+import { coverSrc } from '@/utils/cover'
 
 export type { Reveal, TurnPhase } from './turn'
 
@@ -62,9 +68,14 @@ interface Options {
   onSkipNotice: (notice: SkipNotice, acknowledge: () => void) => void
   /** Bots play on this device (false on players' devices online: the host plays them). */
   runBots?: boolean
+  /**
+   * This device plays the music: choose the next song ahead and load it while
+   * the reveal is on screen (game/upcoming.ts). Asked when it is needed.
+   */
+  canPrefetch?: () => boolean
 }
 
-export function useTurnFlow({ onGameOver, onSkipNotice, runBots = true }: Options) {
+export function useTurnFlow({ onGameOver, onSkipNotice, runBots = true, canPrefetch }: Options) {
   const game = useGame()
   const {
     gameMode,
@@ -151,20 +162,36 @@ export function useTurnFlow({ onGameOver, onSkipNotice, runBots = true }: Option
   )
 
   // ── Song source ──────────────────────────────────────────────────────────
+  const songOptions = poolKey({ daily, decades, exotics, genres, collection, songIds })
+  /** Today's round: the next of its songs. */
+  const nextDaily = useCallback(
+    (): Song | null => (songIds ?? []).map(songById).find((s): s is Song => Boolean(s) && !playedSongs.includes(songKey(s!))) ?? null,
+    [songIds, playedSongs]
+  )
+  const pickNow = useCallback(
+    () =>
+      pickSong(allSongs(), decades, playedSongs, settings.recentSongs, Math.random, exotics, {
+        genres,
+        collection,
+        songIds
+      }),
+    [decades, playedSongs, settings.recentSongs, exotics, genres, collection, songIds]
+  )
+  /** The next song, chosen ahead and loaded while the reveal is on screen. */
+  const upcoming = useRef<Upcoming | null>(null)
+
   const drawSong = useCallback((): Song | null => {
     // Today's round: its songs, one after the other
     if (daily && songIds) {
-      const next = songIds.map(songById).find((s) => s && !playedSongs.includes(songKey(s)))
+      const next = nextDaily()
       if (!next) return null
       addToPlayedSongs(songKey(next))
       setCurrentSong(next)
       return next
     }
-    const { song, widened, replayed } = pickSong(allSongs(), decades, playedSongs, settings.recentSongs, Math.random, exotics, {
-      genres,
-      collection,
-      songIds
-    })
+    const ready = usableUpcoming(upcoming.current, songOptions, playedSongs)
+    upcoming.current = null
+    const { song, widened, replayed } = ready ?? pickNow()
     if (!song) {
       addToast(msg(modesText).allPlayed, 'warning')
       return null
@@ -187,7 +214,29 @@ export function useTurnFlow({ onGameOver, onSkipNotice, runBots = true }: Option
     rememberSong(songKey(song))
     setCurrentSong(song)
     return song
-  }, [daily, decades, exotics, genres, collection, songIds, playedSongs, settings.recentSongs, addToPlayedSongs, rememberSong, setCurrentSong, addToast])
+  }, [daily, songIds, nextDaily, songOptions, playedSongs, pickNow, exotics, decades.length, addToPlayedSongs, rememberSong, setCurrentSong, addToast])
+
+  // Choose and load the next song while the table looks at the reveal (or
+  // waits to draw): it starts at once when drawn. Only where the music plays.
+  const prefetchRef = useRef(canPrefetch)
+  prefetchRef.current = canPrefetch
+  useEffect(() => {
+    if (gameOver || (phase !== 'revealed' && phase !== 'idle')) return
+    if (!prefetchRef.current?.()) return
+    let next: Song | null
+    if (daily && songIds) {
+      next = nextDaily()
+    } else {
+      if (!usableUpcoming(upcoming.current, songOptions, playedSongs)) {
+        upcoming.current = { key: songOptions, draw: pickNow() }
+      }
+      next = upcoming.current?.draw.song ?? null
+    }
+    if (!next) return
+    getPreviewPlayer().preload(next, startPosition(next, settings.randomStartPosition, Math.random))
+    preloadCover(coverSrc(next))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, gameOver, songOptions, playedSongs.length])
 
   // ── Game end ─────────────────────────────────────────────────────────────
   const finishGame = useCallback(
@@ -326,8 +375,9 @@ export function useTurnFlow({ onGameOver, onSkipNotice, runBots = true }: Option
       const named = bonus && naming && gameMode !== 'hardcore' ? judgeNaming(currentSong, naming, jokersOf(placer)) : null
       const jokers = named?.earned ? { jokers: jokersOf(placer) + 1 } : {}
       const timeline = timelineSongsFor(gameMode, placer, globalTimeline)
-      const { isFirstCard, newTimeline } = evaluatePlacement(timeline, currentSong, gapIndex)
-      const result = resolveChallenge(timeline, currentSong, gapIndex, claim)
+      const tolerance = { placer: toleranceOf(placer), challenger: claim ? toleranceOf(players[claim.playerIndex]) : 0 }
+      const { isFirstCard, newTimeline } = evaluatePlacement(timeline, currentSong, gapIndex, tolerance.placer)
+      const result = resolveChallenge(timeline, currentSong, gapIndex, claim, tolerance)
 
       if (result.outcome === 'placer') {
         if (gameMode === 'timeline_global') {
@@ -374,6 +424,7 @@ export function useTurnFlow({ onGameOver, onSkipNotice, runBots = true }: Option
         song: currentSong,
         gapIndex,
         isCorrect: result.placerCorrect,
+        ...(result.placerByTolerance ? { byTolerance: tolerance.placer } : {}),
         isFirstCard,
         playerIndex,
         cardsAfter: placer.cards + (result.outcome === 'placer' ? 1 : 0),
@@ -479,10 +530,11 @@ export function useTurnFlow({ onGameOver, onSkipNotice, runBots = true }: Option
   const submitGuess = useCallback(
     (title: string, artist: string, year: string) => {
       if (phase !== 'guessing' || !currentSong) return
-      const check = validateGuess(title, artist, year, currentSong)
+      const tolerance = toleranceOf(activePlayer)
+      const check = { ...validateGuess(title, artist, year, currentSong), ...(tolerance ? { tolerance } : {}) }
       setReveal({ kind: 'guess', song: currentSong, check, breakdown: guessBreakdown(check), playerIndex: currentPlayer })
     },
-    [phase, currentSong, currentPlayer, setReveal]
+    [phase, currentSong, currentPlayer, activePlayer, setReveal]
   )
 
   const skip = useCallback(() => {

@@ -3,11 +3,14 @@
  * title 5 · artist 5 · year exact 5 / ±1 → 2 / ±2 → 1.
  */
 import type { Song } from '@/types'
+import { scoredDifference } from './tolerance'
 
 export interface GuessCheck {
   titleMatch: boolean
   artistMatch: boolean
   yearDifference: number
+  /** The guesser's year tolerance (game/tolerance); the year scores as if this much closer. */
+  tolerance?: number
 }
 
 export interface GuessBreakdown {
@@ -24,10 +27,10 @@ export function yearPoints(yearDifference: number): 0 | 1 | 2 | 5 {
   return 0
 }
 
-export function guessBreakdown({ titleMatch, artistMatch, yearDifference }: GuessCheck): GuessBreakdown {
+export function guessBreakdown({ titleMatch, artistMatch, yearDifference, tolerance }: GuessCheck): GuessBreakdown {
   const title = titleMatch ? 5 : 0
   const artist = artistMatch ? 5 : 0
-  const year = yearPoints(yearDifference)
+  const year = yearPoints(scoredDifference(yearDifference, tolerance))
   return { title, artist, year, total: title + artist + year }
 }
 
@@ -35,7 +38,7 @@ export function guessDetailsFor(check: GuessCheck): NonNullable<Song['guessDetai
   return {
     titleCorrect: check.titleMatch,
     artistCorrect: check.artistMatch,
-    yearPoints: yearPoints(check.yearDifference)
+    yearPoints: yearPoints(scoredDifference(check.yearDifference, check.tolerance))
   }
 }
 

@@ -44,6 +44,8 @@ export class PreviewPlayerService {
   private state: PlayerState = 'idle'
   private config: PreviewPlayerConfig = {}
   private progressInterval: number | null = null
+  /** A song loaded ahead (preload). */
+  private next: { song: Song; start: number; sound: Howl } | null = null
 
   constructor(config: PreviewPlayerConfig = {}) {
     this.config = config
@@ -72,55 +74,105 @@ export class PreviewPlayerService {
     this.setState('loading')
     this.currentSong = song
 
-    // Create Howler instance
-    this.sound = new Howl({
-      src: [audioSrc(song.previewUrl)],
-      html5: true, // Use HTML5 Audio for streaming
-      volume: 0.8,
-      preload: true,
-      onload: () => {
-        // 'playing' is set by onplay — the browser may still block autoplay
-        // Seek to start position if specified
-        if (startTime > 0 && this.sound) {
-          this.sound.seek(startTime)
-        }
-
-        // Start progress tracking
-        this.startProgressTracking()
-      },
-      onplay: () => {
-        this.setState('playing')
-      },
-      onpause: () => {
-        this.setState('paused')
-      },
-      onstop: () => {
-        this.setState('stopped')
-        this.stopProgressTracking()
-      },
-      onend: () => {
-        this.setState('idle')
-        this.stopProgressTracking()
-        this.config.onEnd?.()
-      },
-      onloaderror: (_id, error) => {
-        console.error(`Preview load error: ${song.title}`, error)
-        this.setState('error')
-        this.config.onError?.(msg(modesText).loadFailed)
-      },
-      onplayerror: () => {
-        // Autoplay blocked (typical after a reload on phones): wait paused and
-        // start on the browser's next unlock (the first tap anywhere).
-        this.setState('paused')
-        this.config.onBlocked?.()
-        this.sound?.once('unlock', () => {
-          if (this.sound && this.state === 'paused') this.sound.play()
-        })
-      }
-    })
+    // Loaded ahead (preload): take that sound over, it is buffered already
+    const ahead = this.next && this.next.song.id === song.id ? this.next : null
+    if (ahead) this.next = null
+    const sound =
+      ahead?.sound ??
+      new Howl({
+        src: [audioSrc(song.previewUrl)],
+        html5: true, // Use HTML5 Audio for streaming
+        volume: 0.8,
+        preload: true
+      })
+    this.sound = sound
+    this.wire(sound, song, startTime)
+    if (ahead && sound.state() === 'loaded') {
+      const at = sound.seek()
+      if (typeof at !== 'number' || Math.abs(at - startTime) > 0.5) sound.seek(startTime)
+      this.startProgressTracking()
+    }
 
     // Start playback
-    this.sound.play()
+    sound.play()
+  }
+
+  /**
+   * Load a song ahead, silently, so it starts without a wait when it is
+   * drawn: the file is requested and buffered at `startTime`. play() with the
+   * same song takes it over. One song at a time; a new one replaces it.
+   */
+  preload(song: Song, startTime: number = 0): void {
+    if (!song.previewUrl) return
+    if (this.next?.song.id === song.id || this.currentSong?.id === song.id) return
+    this.clearPreload()
+    const sound = new Howl({ src: [audioSrc(song.previewUrl)], html5: true, volume: 0.8, preload: true })
+    sound.once('load', () => {
+      if (startTime > 0) sound.seek(startTime)
+    })
+    sound.once('loaderror', () => {
+      if (this.next?.sound === sound) this.clearPreload()
+    })
+    this.next = { song, start: startTime, sound }
+  }
+
+  /** Where a preloaded song was buffered (null when it is not the one loaded ahead). */
+  plannedStart(songId: string): number | null {
+    return this.next?.song.id === songId ? this.next.start : null
+  }
+
+  /** The song loaded ahead, if any. */
+  getPreloadedId(): string | null {
+    return this.next?.song.id ?? null
+  }
+
+  /** Drop the song loaded ahead. */
+  clearPreload(): void {
+    this.next?.sound.unload()
+    this.next = null
+  }
+
+  private wire(sound: Howl, song: Song, startTime: number): void {
+    const mine = () => this.sound === sound
+    sound.on('load', () => {
+      if (!mine()) return
+      // 'playing' is set by onplay — the browser may still block autoplay
+      if (startTime > 0) sound.seek(startTime)
+      this.startProgressTracking()
+    })
+    sound.on('play', () => {
+      if (mine()) this.setState('playing')
+    })
+    sound.on('pause', () => {
+      if (mine()) this.setState('paused')
+    })
+    sound.on('stop', () => {
+      if (!mine()) return
+      this.setState('stopped')
+      this.stopProgressTracking()
+    })
+    sound.on('end', () => {
+      if (!mine()) return
+      this.setState('idle')
+      this.stopProgressTracking()
+      this.config.onEnd?.()
+    })
+    sound.on('loaderror', (_id, error) => {
+      if (!mine()) return
+      console.error(`Preview load error: ${song.title}`, error)
+      this.setState('error')
+      this.config.onError?.(msg(modesText).loadFailed)
+    })
+    sound.on('playerror', () => {
+      if (!mine()) return
+      // Autoplay blocked (typical after a reload on phones): wait paused and
+      // start on the browser's next unlock (the first tap anywhere).
+      this.setState('paused')
+      this.config.onBlocked?.()
+      sound.once('unlock', () => {
+        if (mine() && this.state === 'paused') sound.play()
+      })
+    })
   }
 
   /** The song loaded right now (null when stopped). */
@@ -239,6 +291,7 @@ export class PreviewPlayerService {
    */
   destroy(): void {
     this.stop()
+    this.clearPreload()
     this.config = {}
   }
 

@@ -26,3 +26,14 @@ export async function copySong(
     return false
   }
 }
+
+/** Copy any text; true when it worked. */
+export async function copyText(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text)
+    haptic('tick')
+    return true
+  } catch {
+    return false
+  }
+}

@@ -31,11 +31,13 @@ export type Reveal =
       challenge: ChallengeResult | null
       /** Bonus option: what the placer named, judged. */
       naming?: NamingResult | null
+      /** Right only thanks to the placer's year tolerance (its size in years). */
+      byTolerance?: number
     }
   | {
       kind: 'guess'
       song: Song
-      check: ReturnType<typeof validateGuess>
+      check: ReturnType<typeof validateGuess> & { tolerance?: number }
       breakdown: GuessBreakdown
       playerIndex: number
     }

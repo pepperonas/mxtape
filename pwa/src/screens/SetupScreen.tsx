@@ -23,6 +23,7 @@ import { spring } from '@/motion/springs'
 import { allSongs } from '@/data/catalogue'
 import { missedSongs, NEMESIS_MIN } from '@/game/stats'
 import { MAX_JOKERS } from '@/game/bonus'
+import { nextTolerance, toleranceOf } from '@/game/tolerance'
 import { COLLECTIONS, DECADES, GENRE_GROUPS, countByDecade, decadeLabel, songPool, type Collection } from '@/game/songPool'
 import { GOAL_LABEL, GOAL_OPTIONS, goalWord } from '@/game/roundEnd'
 import { STARTING_CHALLENGES } from '@/game/challenge'
@@ -92,6 +93,7 @@ export function SetupScreen() {
     addPlayer,
     removePlayer,
     setPlayers,
+    updatePlayer,
     startGame,
     resetGame,
     isGameStarted,
@@ -122,6 +124,12 @@ export function SetupScreen() {
 
   const humans = players.filter((p) => !p.isBot)
   const bots = players.filter((p) => p.isBot)
+  // Year handicap (game/tolerance): open when someone has one already
+  const [handicapOn, setHandicapOn] = useState(() => players.some((p) => toleranceOf(p) > 0))
+  const switchHandicap = (on: boolean) => {
+    setHandicapOn(on)
+    if (!on) players.forEach((p, i) => p.tolerance && updatePlayer(i, { tolerance: 0 }))
+  }
   const botsOn = bots.length > 0
   const canUseBots = humans.length === 1
 
@@ -306,7 +314,12 @@ export function SetupScreen() {
     setOptions({ collection: opts.collection, songIds: opts.songIds, daily: null })
     if (teamsActive) {
       setPlayers(
-        teams.map<Player>((members, i) => ({ name: TEAMS[i].name, members, memberTurn: 0, timeline: [], cards: 0, score: 0 }))
+        teams.map<Player>((members, i) => {
+          // A team's handicap: the mean of its members', rounded
+          const own = members.map((n) => toleranceOf(players.find((p) => p.name === n)))
+          const tolerance = own.length ? Math.round(own.reduce((a, b) => a + b, 0) / own.length) : 0
+          return { name: TEAMS[i].name, members, memberTurn: 0, timeline: [], cards: 0, score: 0, ...(tolerance ? { tolerance } : {}) }
+        })
       )
     }
     startGame()
@@ -453,6 +466,17 @@ export function SetupScreen() {
                     {p.name}
                     {p.isBot && p.botDifficulty && <span className="meta"> ({DIFFICULTY_LABEL[p.botDifficulty]})</span>}
                   </span>
+                  {handicapOn && !p.isBot && (
+                    <button
+                      type="button"
+                      data-tolerance={toleranceOf(p)}
+                      className={`chip m3-state-layer !min-h-[40px] !px-3 tabular ${toleranceOf(p) > 0 ? '!bg-md-secondary-container !text-md-on-secondary-container' : ''}`}
+                      onClick={() => updatePlayer(i, { tolerance: nextTolerance(toleranceOf(p)) })}
+                      aria-label={t.toleranceOf(p.name, toleranceOf(p))}
+                    >
+                      {t.toleranceChip(toleranceOf(p))}
+                    </button>
+                  )}
                   {!p.isBot && (
                     <button type="button" className="icon-btn m3-state-layer" onClick={() => removePlayer(i)} aria-label={t.removePlayer(p.name)}>
                       <Icon name="close" size={20} />
@@ -500,6 +524,15 @@ export function SetupScreen() {
                   {n}
                 </button>
               ))}
+            </div>
+          )}
+          {humans.length > 0 && (
+            <div className="mt-4 flex items-start gap-4 rounded-m3-lg bg-md-surface-container-low px-4 py-3" data-handicap>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-title-sm">{t.handicap}</h3>
+                <p className="meta">{t.handicapHint}</p>
+              </div>
+              <Switch checked={handicapOn} onChange={switchHandicap} ariaLabel={t.handicap} />
             </div>
           )}
         </section>

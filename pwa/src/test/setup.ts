@@ -100,6 +100,7 @@ vi.mock('howler', () => ({
     play: vi.fn(),
     pause: vi.fn(),
     stop: vi.fn(),
+    unload: vi.fn(),
     on: vi.fn(),
     once: vi.fn(),
     off: vi.fn(),

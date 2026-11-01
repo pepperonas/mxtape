@@ -14,9 +14,11 @@ import { spring } from '@/motion/springs'
 import type { GameMode, Player } from '@/types'
 import { rankPlayers } from '@/game/tiebreak'
 import { useMessages } from '@/i18n'
+import { wishText } from '@/i18n/messages/wishes'
 import { gameText } from '@/i18n/messages/game'
 import { achievementText } from '@/i18n/messages/achievements'
 import { SignUpOffer } from './SignUpOffer'
+import { SongWishButton } from '@/components/library/SongWish'
 import { COVER_MAX, shareResultCard } from '@/utils/resultImage'
 import { formatDay } from '@/utils/format'
 import { dailyText } from '@/i18n/messages/daily'
@@ -61,6 +63,7 @@ export function rankDelay(index: number, count: number): number {
 
 export function GameOver({ winner, players, mode, onRematch, onHome, rematchBy, homeLabel, signUpName, daily, earned, songIds = [] }: GameOverProps) {
   const t = useMessages(gameText)
+  const wt = useMessages(wishText)
   const at = useMessages(achievementText)
   const dt = useMessages(dailyText)
   const hardcore = mode === 'hardcore'
@@ -190,6 +193,10 @@ export function GameOver({ winner, players, mode, onRematch, onHome, rematchBy, 
           <button type="button" className="btn btn-text m3-state-layer w-full" onClick={onHome}>
             {homeLabel ?? t.toHome}
           </button>
+          {/* A song was missing in this round? Ask for it (approved accounts only) */}
+          <div className="flex justify-center">
+            <SongWishButton className="btn btn-text m3-state-layer text-md-on-surface-variant" label={wt.missingQuestion} />
+          </div>
         </div>
       </div>
     </m.div>

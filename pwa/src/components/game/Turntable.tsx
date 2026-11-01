@@ -27,6 +27,7 @@ import { coverSrc } from '@/utils/cover'
 import { useMessages } from '@/i18n'
 import { gameText } from '@/i18n/messages/game'
 import { SpotifyHold } from './SpotifyHold'
+import { startPosition } from '@/game/startPosition'
 
 interface TurntableProps {
   song: Song | null
@@ -73,17 +74,7 @@ interface TurntableProps {
 /** A follower jumps when it is further than this from the host (seconds). */
 const SYNC_TOLERANCE_S = 0.25
 
-const RANDOM_START_MAX_S = 150 // ~3.5 min average song, keep ≥ 60 s left
-
-/**
- * Where a new song starts (s): where it becomes recognisable (`startMs`,
- * silence and quiet intros skipped) — or a random point after that.
- */
-export function startPosition(song: Pick<Song, 'startMs'>, random: boolean, rand: () => number): number {
-  const from = (song.startMs ?? 0) / 1000
-  if (!random) return from
-  return Math.floor(from + rand() * Math.max(0, RANDOM_START_MAX_S - from))
-}
+export { startPosition } from '@/game/startPosition'
 
 /** Reveal with a cover: the sleeve comes to the front, the record slides out to
  * the right behind it. Both shrink to SLEEVE_SCALE of the record's place; the
@@ -139,6 +130,7 @@ export function Turntable({
     })
     return () => {
       p.stop()
+      p.clearPreload()
       p.setConfig({})
     }
   }, [addToast])
@@ -162,7 +154,8 @@ export function Turntable({
       if (cue.playing) player.current.play(song, cuePosition(cue, Date.now(), clockOffset())).catch(() => {})
       return
     }
-    const start = startPosition(song, settings.randomStartPosition, Math.random)
+    // A song loaded ahead (see game/prefetch.ts) starts where it was loaded
+    const start = player.current.plannedStart(song.id) ?? startPosition(song, settings.randomStartPosition, Math.random)
     player.current.play(song, start).catch(() => {})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [songKey])

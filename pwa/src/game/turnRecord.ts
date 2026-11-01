@@ -3,6 +3,7 @@
  * where the turn is booked: on the placement (timeline modes, incl. an
  * objection) and when a guess is credited (hardcore).
  */
+import { scoredDifference } from './tolerance'
 import type { Player, Song, TurnRecord } from '@/types'
 import type { GuessCheck } from './guess'
 import { activeMember } from './teams'
@@ -49,7 +50,8 @@ export function guessRecord(player: Player, song: Song, check: GuessCheck, point
     ...who(player),
     s: song.id,
     y: song.year,
-    ok: d !== undefined && d <= 2,
+    // Right = the year scored (a year tolerance counts); d stays the real difference
+    ok: d !== undefined && scoredDifference(d, check.tolerance) <= 2,
     ...(d !== undefined ? { d } : {}),
     ti: check.titleMatch,
     ar: check.artistMatch,

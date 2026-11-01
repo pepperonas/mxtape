@@ -17,10 +17,10 @@
 <p>Neu hier? <a href="https://mxtape.celox.io/about"><b>mxtape.celox.io/about</b></a> stellt das Spiel vor und beantwortet die häufigen Fragen – mit einer kleinen Zeitleiste zum Ausprobieren, ganz ohne Konto.</p>
 
 <!-- BADGES:BIG — version, tests, lines of code and songs; readme.test.ts keeps them true, scripts/readme-badges.mjs rewrites them. -->
-[![version](https://img.shields.io/badge/version-0.28.8-C2185B?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/pepperonas/mxtape/releases/latest)
-[![tests](https://img.shields.io/badge/tests-1182-2E9E5B?style=for-the-badge&logo=vitest&logoColor=white)](#tests-und-ci)
-[![lines of code](https://img.shields.io/badge/lines%20of%20code-33.2k-4B6BDF?style=for-the-badge&logo=typescript&logoColor=white)](pwa/src)
-[![test code](https://img.shields.io/badge/test%20code-14.0k-2E9E5B?style=for-the-badge&logo=typescript&logoColor=white)](#tests-und-ci)
+[![version](https://img.shields.io/badge/version-0.29.0-C2185B?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/pepperonas/mxtape/releases/latest)
+[![tests](https://img.shields.io/badge/tests-1217-2E9E5B?style=for-the-badge&logo=vitest&logoColor=white)](#tests-und-ci)
+[![lines of code](https://img.shields.io/badge/lines%20of%20code-34.2k-4B6BDF?style=for-the-badge&logo=typescript&logoColor=white)](pwa/src)
+[![test code](https://img.shields.io/badge/test%20code-14.6k-2E9E5B?style=for-the-badge&logo=typescript&logoColor=white)](#tests-und-ci)
 [![songs](https://img.shields.io/badge/songs-800-FF8A3D?style=for-the-badge&logo=applemusic&logoColor=white)](#die-songsammlung)
 
 [![Donate with PayPal](https://img.shields.io/badge/PayPal-support%20this%20project-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?business=martin.pfeffer@celox.io&currency_code=EUR&item_name=mxtape)
@@ -181,6 +181,9 @@ Statt ein Handy herumzureichen, spielt jede Person auf dem eigenen Gerät – im
 ## Funktionen
 
 - **800 Songs** von den 50ern bis heute, selbst gehostet, auf Wunsch mit zufälliger Startstelle
+- **Jahres-Ausgleich:** für gemischte Runden darf jede Person ±1, 2, 3 oder 5 Jahre danebenliegen – die Karte zählt trotzdem und rutscht an ihren richtigen Platz, im Hardcore-Modus zählt das Jahr, als läge es so viel näher
+- **Kein Warten auf die Musik:** während die Karte aufgedeckt ist, wird der nächste Song schon ausgewählt und geladen; er startet sofort beim Ziehen
+- **Songwünsche:** fehlt ein Song, wünscht man ihn sich in der Song-Übersicht (oder direkt aus einer leeren Suche) und sieht dort, ob er aufgenommen wurde
 - **Tagesrunde:** jeden Tag dieselben Songs für alle, bis die erste Karte danebenliegt; die längste Serie unter deinen Freunden gewinnt den Tag. Ein Versuch: pausieren und auf jedem Gerät weiterspielen geht, neu starten nicht. Danach ausgewählten Freunden per Mail Bescheid geben (die das im Profil abbestellen können)
 - **Ergebnis teilen** als Bild (WhatsApp und Co.) direkt vom Endbildschirm
 - **Song melden** nach dem Aufdecken (falsches Jahr, falsche Version, schlechter Ton, falsches Cover); der Admin korrigiert das Jahr oder nimmt den Song heraus – sofort für alle Runden
