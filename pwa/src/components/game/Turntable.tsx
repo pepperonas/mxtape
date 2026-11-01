@@ -11,7 +11,7 @@
  * gets the screen. The record travels between both layouts as one shared
  * element; the audio is untouched (same component, same player).
  */
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { AnimatePresence, m } from 'motion/react'
 import { Vinyl } from '@/components/ui/Vinyl'
 import { Icon } from '@/components/ui/Icon'
@@ -26,6 +26,7 @@ import { preloadCover, useCoverColor } from '@/utils/coverColor'
 import { coverSrc } from '@/utils/cover'
 import { useMessages } from '@/i18n'
 import { gameText } from '@/i18n/messages/game'
+import { SpotifyHold } from './SpotifyHold'
 
 interface TurntableProps {
   song: Song | null
@@ -357,7 +358,9 @@ export function Turntable({
                 transition={spring.spatialFast}
                 data-sleeve
               >
-                <img src={revealCover} alt="" className="w-full h-full object-cover" onError={() => setSleeveFailed(revealCover)} />
+                <SleeveHold song={song}>
+                  <img src={revealCover} alt="" className="w-full h-full object-cover" onError={() => setSleeveFailed(revealCover)} />
+                </SleeveHold>
               </m.span>
             )}
           </AnimatePresence>
@@ -443,7 +446,9 @@ export function Turntable({
               data-sleeve
             >
               <div className="w-full h-full rounded-m3-sm overflow-hidden shadow-m3-3 bg-md-surface-container-highest">
-                <img src={revealCover} alt="" className="w-full h-full object-cover" onError={() => setSleeveFailed(revealCover)} />
+                <SleeveHold song={song}>
+                  <img src={revealCover} alt="" className="w-full h-full object-cover" onError={() => setSleeveFailed(revealCover)} />
+                </SleeveHold>
               </div>
               {/* Positioned by a plain wrapper: Motion owns the transform of the pill */}
               <span className="absolute inset-x-0 -bottom-5 flex justify-center">
@@ -588,4 +593,14 @@ function ringColorFor(correct: boolean | null | undefined) {
 function formatTime(s: number) {
   const t = Math.max(0, Math.floor(s))
   return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`
+}
+
+/** The sleeve's cover opens the song in Spotify when held (only ever shown after the reveal). */
+function SleeveHold({ song, children }: { song: Song | null; children: ReactNode }) {
+  if (!song) return <>{children}</>
+  return (
+    <SpotifyHold song={song} className="block w-full h-full">
+      {children}
+    </SpotifyHold>
+  )
 }

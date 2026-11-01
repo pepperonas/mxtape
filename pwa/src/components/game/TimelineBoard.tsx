@@ -25,6 +25,7 @@
  */
 import { useCallback, useEffect, useRef, useState, type Ref, type RefObject } from 'react'
 import { SongCover } from './SongInfo'
+import { SpotifyHold } from './SpotifyHold'
 import { AnimatePresence, animate, m, useMotionValue } from 'motion/react'
 import type { Song } from '@/types'
 import { gapLabel } from '@/game/placement'
@@ -401,7 +402,9 @@ function CardContent({ song, owner, yearHidden, revealYear, blurYear, mark }: Ca
           Left out on the narrowest phones, where the title needs the room. */}
       {!yearHidden && (
         <span className="hidden min-[360px]:block" data-card-cover>
-          <SongCover song={song} size={40} />
+          <SpotifyHold song={song}>
+            <SongCover song={song} size={40} />
+          </SpotifyHold>
         </span>
       )}
       <span className="min-w-0 flex-1">

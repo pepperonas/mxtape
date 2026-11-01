@@ -28,6 +28,7 @@ import { PositionStrip } from './PositionStrip'
 import { Icon } from '@/components/ui/Icon'
 import { GripIcon } from '@/components/ui/GripIcon'
 import { SongCover, SongInfo } from './SongInfo'
+import { SpotifyHold } from './SpotifyHold'
 import { MAX_JOKERS, type Naming, type NamingResult } from '@/game/bonus'
 import { useMessages } from '@/i18n'
 import { gameText } from '@/i18n/messages/game'
@@ -483,7 +484,9 @@ function ResultStage({
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <span className="relative flex-shrink-0">
-            <SongCover song={song} size={52} />
+            <SpotifyHold song={song}>
+              <SongCover song={song} size={52} />
+            </SpotifyHold>
             <m.span
               initial={{ scale: 0.4, rotate: -30 }}
               animate={{ scale: 1, rotate: 0 }}

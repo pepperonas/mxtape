@@ -225,7 +225,8 @@ export const gameText = defineMessages({
     reportCancel: 'Abbrechen',
     reportThanks: 'Danke, ist gemeldet.',
     copied: (line: string) => `Kopiert: ${line}`,
-    copyFailed: 'Kopieren ging nicht.'
+    copyFailed: 'Kopieren ging nicht.',
+    holdForSpotify: 'Cover gedrückt halten: in Spotify öffnen'
   },
   en: {
     skippedTooOften: 'Skipped too often',
@@ -438,6 +439,7 @@ export const gameText = defineMessages({
     reportCancel: 'Cancel',
     reportThanks: 'Thanks, it is reported.',
     copied: (line: string) => `Copied: ${line}`,
-    copyFailed: 'Copying did not work.'
+    copyFailed: 'Copying did not work.',
+    holdForSpotify: 'Press and hold the cover to open it in Spotify'
   }
 })

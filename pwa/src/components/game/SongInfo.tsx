@@ -12,6 +12,7 @@ import { spring } from '@/motion/springs'
 import { useLang, useMessages } from '@/i18n'
 import { gameText } from '@/i18n/messages/game'
 import { ReportSongButton } from './ReportSong'
+import { SpotifyHold } from './SpotifyHold'
 
 interface SongInfoProps {
   song: Song
@@ -91,7 +92,9 @@ export function SongInfo({ song, head = 'full', delay = 0 }: SongInfoProps) {
     >
       {head === 'full' && (
         <div className="flex items-center gap-3">
-          <SongCover song={song} size={64} />
+          <SpotifyHold song={song}>
+            <SongCover song={song} size={64} />
+          </SpotifyHold>
           <div className="min-w-0">
             <p className="text-title-sm truncate">{song.title}</p>
             <p className="text-body-sm text-md-on-surface-variant truncate">{song.artist}</p>
@@ -101,7 +104,9 @@ export function SongInfo({ song, head = 'full', delay = 0 }: SongInfoProps) {
       )}
       {head === 'album' && (
         <div className="flex items-center gap-3">
-          <SongCover song={song} size={48} />
+          <SpotifyHold song={song}>
+            <SongCover song={song} size={48} />
+          </SpotifyHold>
           <p className="min-w-0 text-body-md text-md-on-surface-variant">
             <span className="block text-label-md">{t.album}</span>
             <span className="block text-md-on-surface truncate">{song.album || song.title}</span>
