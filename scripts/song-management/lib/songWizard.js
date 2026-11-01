@@ -27,6 +27,12 @@ export function parseArgs(argv) {
   const flags = { yes: false, upload: true, exotic: undefined }
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i]
+    // `--` ends the options: everything after it is artist/title, even "--yes"
+    // (the admin area copies wished songs as `add-song.js -- 'artist' 'title'`)
+    if (a === '--') {
+      positional.push(...argv.slice(i + 1))
+      break
+    }
     if (a === '--yes' || a === '-y') flags.yes = true
     else if (a === '--no-upload') flags.upload = false
     else if (a === '--exotic') flags.exotic = true

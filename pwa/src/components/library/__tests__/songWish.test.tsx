@@ -98,7 +98,21 @@ describe('song wishes in the admin area', () => {
 
   it('the copied command quotes for the shell', () => {
     expect(addSongCommand({ artist: "Guns N' Roses", title: 'Patience' })).toBe(
-      "node scripts/song-management/add-song.js 'Guns N'\\'' Roses' 'Patience'"
+      "node scripts/song-management/add-song.js -- 'Guns N'\\'' Roses' 'Patience'"
     )
+  })
+
+  it('a wish that looks like an option stays artist and title for add-song.js', async () => {
+    // @ts-expect-error plain JS module outside the app
+    const { parseArgs } = await import('../../../../../scripts/song-management/lib/songWizard.js')
+    const cmd = addSongCommand({ artist: '--yes', title: '--year' })
+    // what the shell hands the script: the words after the script name, unquoted
+    const argv = cmd.split('add-song.js ')[1].split(' ').map((w: string) => w.replace(/^'|'$/g, ''))
+    const out = parseArgs(argv)
+    expect(out.positional).toEqual(['--yes', '--year'])
+    expect(out.flags).toMatchObject({ yes: false })
+    expect(out.flags.year).toBeUndefined()
+    // options before -- still work
+    expect(parseArgs(['--yes', '--', 'ABBA', 'SOS'])).toMatchObject({ positional: ['ABBA', 'SOS'], flags: { yes: true } })
   })
 })

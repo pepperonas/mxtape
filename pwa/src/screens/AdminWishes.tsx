@@ -35,10 +35,13 @@ export function useWishCount(): number {
   return n
 }
 
-/** The command that adds the song (shell-quoted). */
+/**
+ * The command that adds the song. Shell-quoted, and `--` ends the script's
+ * options: a wish typed as „--yes“ or „--year“ stays artist/title text.
+ */
 export function addSongCommand(w: Pick<WishGroup, 'artist' | 'title'>): string {
   const q = (s: string) => `'${s.replace(/'/g, `'\\''`)}'`
-  return `node scripts/song-management/add-song.js ${q(w.artist)} ${q(w.title)}`
+  return `node scripts/song-management/add-song.js -- ${q(w.artist)} ${q(w.title)}`
 }
 
 export function AdminWishes({ onCount }: { onCount?: (n: number) => void }) {
