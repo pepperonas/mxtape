@@ -17,8 +17,8 @@
 <p>New here? <a href="https://mxtape.celox.io/about"><b>mxtape.celox.io/about</b></a> introduces the game and answers the common questions — with a little timeline to try, no account needed.</p>
 
 <!-- BADGES:BIG — version, tests, lines of code and songs; readme.test.ts keeps them true, scripts/readme-badges.mjs rewrites them. -->
-[![version](https://img.shields.io/badge/version-0.28.7-C2185B?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/pepperonas/mxtape/releases/latest)
-[![tests](https://img.shields.io/badge/tests-1174-2E9E5B?style=for-the-badge&logo=vitest&logoColor=white)](#tests-and-ci)
+[![version](https://img.shields.io/badge/version-0.28.8-C2185B?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/pepperonas/mxtape/releases/latest)
+[![tests](https://img.shields.io/badge/tests-1182-2E9E5B?style=for-the-badge&logo=vitest&logoColor=white)](#tests-and-ci)
 [![lines of code](https://img.shields.io/badge/lines%20of%20code-33.2k-4B6BDF?style=for-the-badge&logo=typescript&logoColor=white)](pwa/src)
 [![test code](https://img.shields.io/badge/test%20code-14.0k-2E9E5B?style=for-the-badge&logo=typescript&logoColor=white)](#tests-and-ci)
 [![songs](https://img.shields.io/badge/songs-800-FF8A3D?style=for-the-badge&logo=applemusic&logoColor=white)](#the-song-library)

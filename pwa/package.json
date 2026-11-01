@@ -1,6 +1,6 @@
 {
   "name": "mxtape-pwa",
-  "version": "0.28.7",
+  "version": "0.28.8",
   "description": "mxtape - Musik-Zeitleisten-Spiel (PWA)",
   "type": "module",
   "scripts": {

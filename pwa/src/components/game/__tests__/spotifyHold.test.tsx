@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { render, fireEvent, act } from '@testing-library/react'
 import { SpotifyHold } from '../SpotifyHold'
 import { HOLD_MS } from '@/hooks/useLongPress'
-import { spotifyUrl } from '@/utils/spotify'
+import { spotifyUrl, spotifyAppUri, spotifyIntent, platformOf, openInSpotify, APP_FALLBACK_MS } from '@/utils/spotify'
 import type { Song } from '@/types'
 
 const song = { id: 'song_000', title: 'Never Gonna Give You Up', artist: 'Rick Astley', year: 1987, spotifyId: '4PTG3Z6ehGkBFwjybzWkR8' } as Song
@@ -21,6 +21,88 @@ describe('spotifyUrl', () => {
   it('otherwise searches for artist and title', () => {
     expect(spotifyUrl({ title: 'Last Christmas', artist: 'Wham!' })).toBe('https://open.spotify.com/search/Wham!%20Last%20Christmas')
     expect(spotifyUrl({ title: 'A & B', artist: 'C', spotifyId: 'nope' })).toBe('https://open.spotify.com/search/C%20A%20%26%20B')
+  })
+})
+
+describe('the Spotify app opens on phones', () => {
+  it('names the track or the search inside the app', () => {
+    expect(spotifyAppUri(song)).toBe('spotify:track:4PTG3Z6ehGkBFwjybzWkR8')
+    expect(spotifyAppUri({ title: 'Last Christmas', artist: 'Wham!' })).toBe('spotify:search:Wham!%20Last%20Christmas')
+  })
+
+  it('Android: an intent for the Spotify app with the web page as its fallback', () => {
+    expect(spotifyIntent(song)).toBe(
+      'intent://track/4PTG3Z6ehGkBFwjybzWkR8#Intent;scheme=spotify;package=com.spotify.music;S.browser_fallback_url=' +
+        encodeURIComponent('https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8') +
+        ';end'
+    )
+  })
+
+  it('tells the platforms apart (an iPad reports itself as a Mac with touch)', () => {
+    expect(platformOf({ userAgent: 'Mozilla/5.0 (Linux; Android 14; SM-S921B)', maxTouchPoints: 5 })).toBe('android')
+    expect(platformOf({ userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)', maxTouchPoints: 5 })).toBe('ios')
+    expect(platformOf({ userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)', maxTouchPoints: 5 })).toBe('ios')
+    expect(platformOf({ userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)', maxTouchPoints: 0 })).toBe('other')
+  })
+
+  const withLocation = () => {
+    const loc = { href: '' }
+    vi.spyOn(window, 'location', 'get').mockReturnValue(loc as unknown as Location)
+    return loc
+  }
+
+  it('Android hands the intent to the system, no new tab', () => {
+    const loc = withLocation()
+    const open = vi.spyOn(window, 'open').mockReturnValue(null)
+    openInSpotify(song, 'android')
+    expect(loc.href).toBe(spotifyIntent(song))
+    expect(open).not.toHaveBeenCalled()
+  })
+
+  it('iPhone: the app; the web page only when the app did not take over', () => {
+    vi.useFakeTimers()
+    const loc = withLocation()
+    const open = vi.spyOn(window, 'open').mockReturnValue(null)
+    openInSpotify(song, 'ios')
+    expect(loc.href).toBe('spotify:track:4PTG3Z6ehGkBFwjybzWkR8')
+    act(() => void vi.advanceTimersByTime(APP_FALLBACK_MS))
+    expect(open).toHaveBeenCalledWith(spotifyUrl(song), '_blank', 'noopener,noreferrer')
+  })
+
+  it('iPhone with the app: the page went away, no web page on top', () => {
+    vi.useFakeTimers()
+    withLocation()
+    const open = vi.spyOn(window, 'open').mockReturnValue(null)
+    const state = vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('visible')
+    openInSpotify(song, 'ios')
+    state.mockReturnValue('hidden')
+    document.dispatchEvent(new Event('visibilitychange'))
+    act(() => void vi.advanceTimersByTime(APP_FALLBACK_MS * 2))
+    expect(open).not.toHaveBeenCalled()
+  })
+
+  it('iPhone: back from the app within the moment, still no web page on top', () => {
+    vi.useFakeTimers()
+    withLocation()
+    const open = vi.spyOn(window, 'open').mockReturnValue(null)
+    const state = vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('visible')
+    openInSpotify(song, 'ios')
+    state.mockReturnValue('hidden')
+    document.dispatchEvent(new Event('visibilitychange'))
+    state.mockReturnValue('visible')
+    act(() => void vi.advanceTimersByTime(APP_FALLBACK_MS * 2))
+    expect(open).not.toHaveBeenCalled()
+  })
+
+  it('iPhone: the app took over even when no visibility event arrived', () => {
+    vi.useFakeTimers()
+    withLocation()
+    const open = vi.spyOn(window, 'open').mockReturnValue(null)
+    const state = vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('visible')
+    openInSpotify(song, 'ios')
+    state.mockReturnValue('hidden')
+    act(() => void vi.advanceTimersByTime(APP_FALLBACK_MS * 2))
+    expect(open).not.toHaveBeenCalled()
   })
 })
 
